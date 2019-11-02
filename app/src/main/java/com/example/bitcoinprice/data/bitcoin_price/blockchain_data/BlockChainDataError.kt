@@ -1,4 +1,4 @@
-package com.example.bitcoinprice.data.blockchain_data
+package com.example.bitcoinprice.data.bitcoin_price.blockchain_data
 
 import java.lang.RuntimeException
 

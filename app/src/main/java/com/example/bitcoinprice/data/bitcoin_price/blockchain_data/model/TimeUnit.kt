@@ -1,4 +1,4 @@
-package com.example.bitcoinprice.data.blockchain_data.model
+package com.example.bitcoinprice.data.bitcoin_price.blockchain_data.model
 
 enum class TimeUnit(val value: String) {
 

@@ -1,7 +1,7 @@
-package com.example.bitcoinprice.data.blockchain_data
+package com.example.bitcoinprice.data.bitcoin_price.blockchain_data
 
-import com.example.bitcoinprice.data.blockchain_data.model.json.Result
-import com.example.bitcoinprice.data.blockchain_data.model.Time
+import com.example.bitcoinprice.data.bitcoin_price.blockchain_data.model.json.Result
+import com.example.bitcoinprice.data.bitcoin_price.blockchain_data.model.Time
 import com.example.bitcoinprice.utils.logs.log
 import com.example.bitcoinprice.utils.rx.SchedulersProvider
 import io.reactivex.Single
@@ -17,7 +17,8 @@ import javax.inject.Inject
 
 class BlockChainDataProviderImpl
     @Inject
-    constructor(private val schedulersProvider: SchedulersProvider): BlockChainDataProvider {
+    constructor(private val schedulersProvider: SchedulersProvider):
+    BlockChainDataProvider {
 
     private val retrofit: Retrofit by lazy { createRetrofit() }
 
@@ -35,8 +36,16 @@ class BlockChainDataProviderImpl
 
     private fun handleError(throwable: Throwable): Single<Result> {
         return when(throwable) {
-            is IOException -> Single.error(BlockChainDataError(BlockChainDataError.Code.NETWORK_ERROR))
-            else -> Single.error(BlockChainDataError(BlockChainDataError.Code.GENERAL_ERROR))
+            is IOException -> Single.error(
+                BlockChainDataError(
+                    BlockChainDataError.Code.NETWORK_ERROR
+                )
+            )
+            else -> Single.error(
+                BlockChainDataError(
+                    BlockChainDataError.Code.GENERAL_ERROR
+                )
+            )
         }
     }
 

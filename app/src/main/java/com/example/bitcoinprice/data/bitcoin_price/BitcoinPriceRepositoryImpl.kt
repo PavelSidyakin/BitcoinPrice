@@ -1,13 +1,13 @@
-package com.example.bitcoinprice.data
+package com.example.bitcoinprice.data.bitcoin_price
 
-import com.example.bitcoinprice.data.blockchain_data.BlockChainDataError
-import com.example.bitcoinprice.data.blockchain_data.BlockChainDataProvider
-import com.example.bitcoinprice.data.blockchain_data.model.Time
-import com.example.bitcoinprice.data.blockchain_data.model.TimeUnit
-import com.example.bitcoinprice.data.blockchain_data.model.json.DataPoint
-import com.example.bitcoinprice.data.blockchain_data.model.json.Result
-import com.example.bitcoinprice.data.blockchain_data.model.json.Status
-import com.example.bitcoinprice.domain.data.BitcoinPriceRepository
+import com.example.bitcoinprice.data.bitcoin_price.blockchain_data.BlockChainDataError
+import com.example.bitcoinprice.data.bitcoin_price.blockchain_data.BlockChainDataProvider
+import com.example.bitcoinprice.data.bitcoin_price.blockchain_data.model.Time
+import com.example.bitcoinprice.data.bitcoin_price.blockchain_data.model.TimeUnit
+import com.example.bitcoinprice.data.bitcoin_price.blockchain_data.model.json.DataPoint
+import com.example.bitcoinprice.data.bitcoin_price.blockchain_data.model.json.Result
+import com.example.bitcoinprice.data.bitcoin_price.blockchain_data.model.json.Status
+import com.example.bitcoinprice.domain.bitcoin_price.data.BitcoinPriceRepository
 import com.example.bitcoinprice.model.data.bitcoin_price.BitcoinPriceRequestDataPoint
 import com.example.bitcoinprice.model.data.bitcoin_price.BitcoinPricesRequestResult
 import com.example.bitcoinprice.model.data.bitcoin_price.BitcoinPricesRequestResultCode
@@ -23,7 +23,12 @@ class BitcoinPriceRepositoryImpl
 
 
     override fun requestBitcoinMarketPrices(periodBeforeTodayDays: Int): Single<BitcoinPricesRequestResult> {
-        return blockChainDataProvider.requestBitcoinMarketPrices(Time(periodBeforeTodayDays, TimeUnit.DAY))
+        return blockChainDataProvider.requestBitcoinMarketPrices(
+            Time(
+                periodBeforeTodayDays,
+                TimeUnit.DAY
+            )
+        )
             .map { convertBlockChainRequestMarketPricesResult2BitcoinPricesRequestResult(it) }
             .doOnSubscribe { log { i(TAG, "BitcoinPriceRepositoryImpl.requestBitcoinMarketPrices(): Subscribe. periodBeforeTodayDays = [${periodBeforeTodayDays}]") } }
             .doOnSuccess { log { i(TAG, "BitcoinPriceRepositoryImpl.requestBitcoinMarketPrices(): Success. Result: $it") } }

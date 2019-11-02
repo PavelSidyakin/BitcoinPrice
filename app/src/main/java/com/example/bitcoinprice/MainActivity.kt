@@ -2,16 +2,12 @@ package com.example.bitcoinprice
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.example.bitcoinprice.data.blockchain_data.BlockChainDataProvider
-import com.example.bitcoinprice.data.blockchain_data.model.Time
-import com.example.bitcoinprice.data.blockchain_data.model.TimeUnit
 import com.example.bitcoinprice.di.screen.BitcoinPriceScreenComponent
-import com.example.bitcoinprice.domain.BitcoinPriceInteractor
-import com.example.bitcoinprice.domain.data.BitcoinPriceRepository
+import com.example.bitcoinprice.domain.bitcoin_price.BitcoinPriceInteractor
 import com.example.bitcoinprice.utils.logs.log
 import javax.inject.Inject
 
-class FullscreenActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity() {
 
     @Inject
     lateinit var bitcoinPriceInteractor: BitcoinPriceInteractor
@@ -30,9 +26,9 @@ class FullscreenActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         bitcoinPriceInteractor.requestBitcoinMarketPrices(7)
-            .doOnSubscribe { log { i("Test", "FullscreenActivity.onCreate(): Subscribe. ") } }
-            .doOnSuccess { log { i("Test", "FullscreenActivity.onCreate(): Success. Result: $it") } }
-            .doOnError { log { w("Test", "FullscreenActivity.onCreate(): Error", it) } }
+            .doOnSubscribe { log { i("Test", "MainActivity.onCreate(): Subscribe. ") } }
+            .doOnSuccess { log { i("Test", "MainActivity.onCreate(): Success. Result: $it") } }
+            .doOnError { log { w("Test", "MainActivity.onCreate(): Error", it) } }
             .subscribe()
 
     }

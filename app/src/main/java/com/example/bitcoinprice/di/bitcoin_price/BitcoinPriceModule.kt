@@ -1,14 +1,14 @@
 package com.example.bitcoinprice.di.bitcoin_price
 
-import com.example.bitcoinprice.data.BitcoinPriceCacheRepositoryImpl
-import com.example.bitcoinprice.data.BitcoinPriceRepositoryImpl
-import com.example.bitcoinprice.data.blockchain_data.BlockChainDataProvider
-import com.example.bitcoinprice.data.blockchain_data.BlockChainDataProviderImpl
+import com.example.bitcoinprice.data.bitcoin_price.BitcoinPriceCacheRepositoryImpl
+import com.example.bitcoinprice.data.bitcoin_price.BitcoinPriceRepositoryImpl
+import com.example.bitcoinprice.data.bitcoin_price.blockchain_data.BlockChainDataProvider
+import com.example.bitcoinprice.data.bitcoin_price.blockchain_data.BlockChainDataProviderImpl
 import com.example.bitcoinprice.di.PerFeature
-import com.example.bitcoinprice.domain.BitcoinPriceInteractor
-import com.example.bitcoinprice.domain.BitcoinPriceInteractorImpl
-import com.example.bitcoinprice.domain.data.BitcoinPriceCacheRepository
-import com.example.bitcoinprice.domain.data.BitcoinPriceRepository
+import com.example.bitcoinprice.domain.bitcoin_price.BitcoinPriceInteractor
+import com.example.bitcoinprice.domain.bitcoin_price.BitcoinPriceInteractorImpl
+import com.example.bitcoinprice.domain.bitcoin_price.data.BitcoinPriceCacheRepository
+import com.example.bitcoinprice.domain.bitcoin_price.data.BitcoinPriceRepository
 import dagger.Binds
 import dagger.Module
 

@@ -1,4 +1,4 @@
-package com.example.bitcoinprice.data.blockchain_data.model.json
+package com.example.bitcoinprice.data.bitcoin_price.blockchain_data.model.json
 
 import com.example.bitcoinprice.model.GsonSerializable
 

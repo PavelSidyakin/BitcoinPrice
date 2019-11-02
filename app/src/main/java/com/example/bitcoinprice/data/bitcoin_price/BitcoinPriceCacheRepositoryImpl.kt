@@ -1,7 +1,7 @@
-package com.example.bitcoinprice.data
+package com.example.bitcoinprice.data.bitcoin_price
 
 import android.util.LruCache
-import com.example.bitcoinprice.domain.data.BitcoinPriceCacheRepository
+import com.example.bitcoinprice.domain.bitcoin_price.data.BitcoinPriceCacheRepository
 import com.example.bitcoinprice.model.data.bitcoin_price.BitcoinPricesRequestResult
 import com.example.bitcoinprice.utils.logs.log
 import io.reactivex.Completable
@@ -42,7 +42,12 @@ class BitcoinPriceCacheRepositoryImpl
     }
 
     override fun putBitcoinMarketPrices(periodBeforeTodayDays: Int, result: BitcoinPricesRequestResult): Completable {
-        return Completable.fromCallable { lruCache.put(periodBeforeTodayDays, CacheItem(System.currentTimeMillis(), result)) }
+        return Completable.fromCallable { lruCache.put(periodBeforeTodayDays,
+            CacheItem(
+                System.currentTimeMillis(),
+                result
+            )
+        ) }
             .doOnSubscribe { log { i(TAG, "BitcoinPriceCacheRepositoryImpl.putBitcoinMarketPrices(): Subscribe. periodBeforeTodayDays = [${periodBeforeTodayDays}], result = [${result}]") } }
             .doOnComplete { log { i(TAG, "BitcoinPriceCacheRepositoryImpl.putBitcoinMarketPrices(): Complete") } }
             .doOnError { log { w(TAG, "BitcoinPriceCacheRepositoryImpl.putBitcoinMarketPrices(): Error", it) } }

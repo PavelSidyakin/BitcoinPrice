@@ -1,6 +1,6 @@
 package com.example.bitcoinprice.di.screen
 
-import com.example.bitcoinprice.FullscreenActivity
+import com.example.bitcoinprice.MainActivity
 import com.example.bitcoinprice.di.PerFeature
 import com.example.bitcoinprice.di.bitcoin_price.BitcoinPriceModule
 import dagger.Subcomponent
@@ -9,6 +9,6 @@ import dagger.Subcomponent
 @PerFeature
 interface BitcoinPriceScreenComponent {
 
-    fun inject(a: FullscreenActivity)
+    fun inject(a: MainActivity)
 
 }

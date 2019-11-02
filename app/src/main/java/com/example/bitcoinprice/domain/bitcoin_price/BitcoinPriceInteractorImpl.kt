@@ -1,7 +1,7 @@
-package com.example.bitcoinprice.domain
+package com.example.bitcoinprice.domain.bitcoin_price
 
-import com.example.bitcoinprice.domain.data.BitcoinPriceCacheRepository
-import com.example.bitcoinprice.domain.data.BitcoinPriceRepository
+import com.example.bitcoinprice.domain.bitcoin_price.data.BitcoinPriceCacheRepository
+import com.example.bitcoinprice.domain.bitcoin_price.data.BitcoinPriceRepository
 import com.example.bitcoinprice.model.data.bitcoin_price.BitcoinPricesRequestResult
 import com.example.bitcoinprice.model.data.bitcoin_price.BitcoinPricesRequestResultCode
 import com.example.bitcoinprice.model.data.bitcoin_price.BitcoinPricesRequestResultData
