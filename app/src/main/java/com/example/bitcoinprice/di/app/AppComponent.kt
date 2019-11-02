@@ -1,7 +1,7 @@
 package com.example.bitcoinprice.di.app
 
 import com.example.bitcoinprice.TheApplication
-import com.example.bitcoinprice.di.screen.BitcoinPriceScreenComponent
+import com.example.bitcoinprice.di.screen.BitcoinPriceGraphScreenComponent
 import dagger.Component
 import javax.inject.Singleton
 
@@ -10,7 +10,7 @@ import javax.inject.Singleton
 interface AppComponent {
     fun inject(mapsActivity: TheApplication)
 
-    fun getBitcoinPriceScreenComponent(): BitcoinPriceScreenComponent
+    fun getBitcoinPriceScreenComponent(): BitcoinPriceGraphScreenComponent
 
     interface Builder {
         fun build(): AppComponent
