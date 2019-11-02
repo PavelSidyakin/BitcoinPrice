@@ -38,8 +38,6 @@ class BitcoinPriceGraphPresenter
 
     }
 
-
-
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
         currentPeriodBeforeTodayDays = 10

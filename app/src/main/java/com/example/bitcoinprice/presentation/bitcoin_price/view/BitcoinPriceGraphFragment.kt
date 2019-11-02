@@ -12,12 +12,13 @@ import com.example.bitcoinprice.R
 import com.example.bitcoinprice.TheApplication
 import com.example.bitcoinprice.presentation.bitcoin_price.presenter.BitcoinPriceGraphPresenter
 import com.github.mikephil.charting.components.Description
+import com.github.mikephil.charting.components.XAxis.XAxisPosition
 import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
-import com.github.mikephil.charting.utils.ColorTemplate
 import kotlinx.android.synthetic.main.layout_bitcoin_price_graph.line_chart_bitcoin_price_graph
+
 
 class BitcoinPriceGraphFragment: MvpAppCompatFragment(), BitcoinPriceGraphView {
 
@@ -35,9 +36,9 @@ class BitcoinPriceGraphFragment: MvpAppCompatFragment(), BitcoinPriceGraphView {
 
     override fun setGraphPoints(entries: List<Entry>) {
 
-        val lineDataSet = LineDataSet(entries, "Bitcoin price")
+        val lineDataSet = LineDataSet(entries, null)
 
-//        lineDataSet.setAxisDependency(YAxis.AxisDependency.LEFT);
+        lineDataSet.axisDependency = YAxis.AxisDependency.LEFT;
         lineDataSet.color = Color.BLUE;
 //        lineDataSet.setValueTextColor(ColorTemplate.getHoloBlue());
 //        lineDataSet.setLineWidth(1.5f);
@@ -54,8 +55,13 @@ class BitcoinPriceGraphFragment: MvpAppCompatFragment(), BitcoinPriceGraphView {
 
 
 
+
         line_chart_bitcoin_price_graph.data = lineData
         line_chart_bitcoin_price_graph.description = Description().apply { text = "" }
+
+        line_chart_bitcoin_price_graph.xAxis.position = XAxisPosition.BOTTOM
+        line_chart_bitcoin_price_graph.xAxis.labelRotationAngle = 90f
+        line_chart_bitcoin_price_graph.legend.isEnabled = false
 
         line_chart_bitcoin_price_graph.invalidate()
 
