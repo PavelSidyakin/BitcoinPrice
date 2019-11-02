@@ -43,6 +43,9 @@ class BitcoinPriceCacheRepositoryImpl
 
     override fun putBitcoinMarketPrices(periodBeforeTodayDays: Int, result: BitcoinPricesRequestResult): Completable {
         return Completable.fromCallable { lruCache.put(periodBeforeTodayDays, CacheItem(System.currentTimeMillis(), result)) }
+            .doOnSubscribe { log { i(TAG, "BitcoinPriceCacheRepositoryImpl.putBitcoinMarketPrices(): Subscribe. periodBeforeTodayDays = [${periodBeforeTodayDays}], result = [${result}]") } }
+            .doOnComplete { log { i(TAG, "BitcoinPriceCacheRepositoryImpl.putBitcoinMarketPrices(): Complete") } }
+            .doOnError { log { w(TAG, "BitcoinPriceCacheRepositoryImpl.putBitcoinMarketPrices(): Error", it) } }
     }
 
     data class CacheItem(
