@@ -1,7 +1,7 @@
 package com.example.bitcoinprice.data.blockchain_data
 
-import com.example.bitcoinprice.data.blockchain_data.model.json.BlockChainRequestMarketPricesResult
-import com.example.bitcoinprice.data.blockchain_data.model.BlockChainTime
+import com.example.bitcoinprice.data.blockchain_data.model.json.Result
+import com.example.bitcoinprice.data.blockchain_data.model.Time
 import com.example.bitcoinprice.utils.logs.log
 import com.example.bitcoinprice.utils.rx.SchedulersProvider
 import io.reactivex.Single
@@ -22,18 +22,18 @@ class BlockChainDataProviderImpl
     private val retrofit: Retrofit by lazy { createRetrofit() }
 
 
-    override fun requestMarketPrices(timeSpan: BlockChainTime, rollingAverage: BlockChainTime): Single<BlockChainRequestMarketPricesResult> {
+    override fun requestBitcoinMarketPrices(timeSpan: Time, rollingAverage: Time?): Single<Result> {
         return Single.fromCallable { createRequestMarketPricesService() }
-            .flatMap { service -> service.requestMarketPrices(timeSpan.asString(), rollingAverage.asString()) }
+            .flatMap { service -> service.requestMarketPrices(timeSpan.asString(), rollingAverage?.asString()) }
             .onErrorResumeNext { throwable -> handleError(throwable) }
-            .doOnSubscribe { log { i(TAG, "BlockChainDataProviderImpl.requestMarketPrices(): Subscribe. timeSpan = [${timeSpan}], rollingAverage = [${rollingAverage}]") } }
-            .doOnSuccess { log { i(TAG, "BlockChainDataProviderImpl.requestMarketPrices(): Success. Result: $it") } }
-            .doOnError { log { w(TAG, "BlockChainDataProviderImpl.requestMarketPrices(): Error", it) } }
+            .doOnSubscribe { log { i(TAG, "BlockChainDataProviderImpl.requestBitcoinMarketPrices(): Subscribe. timeSpan = [${timeSpan}], rollingAverage = [${rollingAverage}]") } }
+            .doOnSuccess { log { i(TAG, "BlockChainDataProviderImpl.requestBitcoinMarketPrices(): Success. Result: $it") } }
+            .doOnError { log { w(TAG, "BlockChainDataProviderImpl.requestBitcoinMarketPrices(): Error", it) } }
             .subscribeOn(schedulersProvider.io())
 
     }
 
-    private fun handleError(throwable: Throwable): Single<BlockChainRequestMarketPricesResult> {
+    private fun handleError(throwable: Throwable): Single<Result> {
         return when(throwable) {
             is IOException -> Single.error(BlockChainDataError(BlockChainDataError.Code.NETWORK_ERROR))
             else -> Single.error(BlockChainDataError(BlockChainDataError.Code.GENERAL_ERROR))
@@ -64,11 +64,11 @@ class BlockChainDataProviderImpl
     private interface RequestMarketPricesService {
         @GET("market-price/")
         fun requestMarketPrices(@Query("timespan") timeSpan: String,
-                                @Query("rollingAverage") rollingAverage: String)
-                : Single<BlockChainRequestMarketPricesResult>
+                                @Query("rollingAverage") rollingAverage: String?)
+                : Single<Result>
     }
 
-    private fun BlockChainTime.asString(): String {
+    private fun Time.asString(): String {
         return "${unitCount}${timeUnit.value}"
     }
 

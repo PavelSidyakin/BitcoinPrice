@@ -1,10 +1,10 @@
 package com.example.bitcoinprice.data.blockchain_data.model
 
-enum class BlockChainTimeUnit(val value: String) {
+enum class TimeUnit(val value: String) {
 
     MINUTE("minute"),
     HOUR("hour"),
-    DAY("day"),
+    DAY("days"),
     WEEK("week"),
     YEAR("year"),
 

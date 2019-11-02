@@ -1,8 +1,8 @@
 package com.example.bitcoinprice.data.blockchain_data.model
 
-data class BlockChainTime (
+data class Time (
 
     val unitCount: Int,
-    val timeUnit: BlockChainTimeUnit
+    val timeUnit: TimeUnit
 
 )
