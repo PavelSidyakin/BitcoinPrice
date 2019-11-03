@@ -88,20 +88,14 @@ class BitcoinPriceGraphPresenter
     }
 
     private fun hideAllErrors() {
-        Single.fromCallable {
-                viewState.showGeneraError(false)
-                viewState.showNetworkError(false)
-            }
-            .subscribeOn(schedulersProvider.main())
-            .subscribe()
-            .addTo(compositeDisposable)
+        runOnMainThread {
+            viewState.showGeneraError(false)
+            viewState.showNetworkError(false)
+        }
     }
 
     private fun showLoadingProgress(show: Boolean) {
-        Single.fromCallable { viewState.showLoadingProgress(show) }
-            .subscribeOn(schedulersProvider.main())
-            .subscribe()
-            .addTo(compositeDisposable)
+        runOnMainThread { viewState.showLoadingProgress(show)  }
     }
 
     private fun displayBitcoinPrices(bitcoinPricePoints: List<BitcoinPriceDataPoint>) {
@@ -115,7 +109,6 @@ class BitcoinPriceGraphPresenter
     }
 
     private fun calcAndDisplayInfo(bitcoinPricePoints: List<BitcoinPriceDataPoint>) {
-
         Single.fromCallable { bitcoinPricePoints.map { it.priceUsd } }
             .map { pricesList -> InfoData(pricesList.max(), pricesList.min(), pricesList.average()) }
             .observeOn(schedulersProvider.main())
@@ -135,6 +128,13 @@ class BitcoinPriceGraphPresenter
         super.onDestroy()
         compositeDisposable.dispose()
         bitcoinPriceGraphScreenComponent = null
+    }
+
+    private fun runOnMainThread(block: () -> Unit) {
+        Single.fromCallable { block() }
+            .subscribeOn(schedulersProvider.main())
+            .subscribe()
+            .addTo(compositeDisposable)
     }
 
     data class InfoData (
