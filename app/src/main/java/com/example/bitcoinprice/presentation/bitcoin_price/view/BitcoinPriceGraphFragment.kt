@@ -1,6 +1,7 @@
 package com.example.bitcoinprice.presentation.bitcoin_price.view
 
 import android.content.Context
+import android.content.res.Configuration
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -169,7 +170,6 @@ class BitcoinPriceGraphFragment: MvpAppCompatFragment(), BitcoinPriceGraphView {
 
     private fun onChipSelected(chip: Chip) {
         presenter.onDisplayPeriodSelected(chip.tag as DisplayPeriod)
-
     }
 
     private fun formatTimestamp(timestamp: Long): String {
@@ -187,6 +187,11 @@ class BitcoinPriceGraphFragment: MvpAppCompatFragment(), BitcoinPriceGraphView {
             theme.resolveAttribute(color, typedValue, true)
             typedValue.data
         } ?: 0
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        fragmentManager?.beginTransaction()?.detach(this)?.attach(this)?.commit()
     }
 
     inner class PointMarker(context: Context) : MarkerView(context, R.layout.layout_bitcoin_price_graph_marker) {

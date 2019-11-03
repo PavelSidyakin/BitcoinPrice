@@ -18,8 +18,6 @@ class MainActivity : AppCompatActivity() {
         fragmentTransaction.replace(R.id.main_activity_container, BitcoinPriceGraphFragment())
 
         fragmentTransaction.commit()
-        fragmentManager.executePendingTransactions()
     }
-
 
 }

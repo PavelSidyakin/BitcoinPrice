@@ -42,8 +42,6 @@ class BitcoinPriceGraphPresenter
     }
 
     override fun onFirstViewAttach() {
-        super.onFirstViewAttach()
-
         DisplayPeriod.values().forEach { viewState.addDisplayPeriod(it) }
         viewState.selectDisplayPeriod(currentDisplayPeriod)
     }
@@ -53,6 +51,7 @@ class BitcoinPriceGraphPresenter
 
         currentDisplayPeriod = displayPeriod
         requestBitcoinPricesAndDisplay()
+        viewState.selectDisplayPeriod(currentDisplayPeriod) // To auto select period on rotation
     }
 
     private fun requestBitcoinPricesAndDisplay() {
