@@ -25,10 +25,15 @@ interface BitcoinPriceGraphView : MvpView {
     fun setMaxPriceInPeriod(maxPrice: Double)
 
     @StateStrategyType(OneExecutionStateStrategy::class)
-    fun setMinPriceInPeriod(maxPrice: Double)
+    fun setMinPriceInPeriod(minPrice: Double)
 
     @StateStrategyType(OneExecutionStateStrategy::class)
     fun setAveragePriceInPeriod(averagePrice: Double)
 
+    @StateStrategyType(OneExecutionStateStrategy::class)
+    fun showGeneraError(show: Boolean)
+
+    @StateStrategyType(OneExecutionStateStrategy::class)
+    fun showNetworkError(show: Boolean)
 
 }

@@ -15,6 +15,7 @@ import com.example.bitcoinprice.utils.rx.SchedulersProvider
 import com.github.mikephil.charting.data.Entry
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.addTo
 import javax.inject.Inject
 
@@ -57,18 +58,43 @@ class BitcoinPriceGraphPresenter
 
     private fun requestBitcoinPricesAndDisplay() {
         bitcoinPriceInteractor.requestBitcoinMarketPrices(currentDisplayPeriod.timePeriod)
-                // TODO: filter errors
             .doOnSubscribe { showLoadingProgress(true) }
+            .doOnSubscribe { hideAllErrors() }
             .doFinally { showLoadingProgress(false) }
-            .subscribe { result -> result?.let { processRequestBitcoinPricesResult(result) } }
+            .doOnSuccess { result -> result?.let { processRequestBitcoinPricesResult(result) } }
+            .subscribeOn(schedulersProvider.io())
+            .doOnSubscribe { log { i(TAG, "BitcoinPriceGraphPresenter.requestBitcoinPricesAndDisplay(): Subscribe. ") } }
+            .doOnSuccess { log { i(TAG, "BitcoinPriceGraphPresenter.requestBitcoinPricesAndDisplay(): Success. Result: $it") } }
+            .doOnError { log { w(TAG, "BitcoinPriceGraphPresenter.requestBitcoinPricesAndDisplay(): Error", it) } }
+            .subscribe()
             .addTo(compositeDisposable)
     }
 
-    private fun processRequestBitcoinPricesResult(result: BitcoinPricesResult) {
-        if (result.resultCode == BitcoinPricesResultCode.OK) {
-            result.data?.points?.let { displayBitcoinPrices(result.data.points) }
-        }
+    fun retry() {
+        requestBitcoinPricesAndDisplay()
+    }
 
+    private fun processRequestBitcoinPricesResult(result: BitcoinPricesResult) {
+        when (result.resultCode) {
+            BitcoinPricesResultCode.OK -> processSuccessResult(result)
+            BitcoinPricesResultCode.NETWORK_ERROR -> viewState.showNetworkError(true)
+            BitcoinPricesResultCode.GENERAL_ERROR -> viewState.showGeneraError(true)
+        }
+    }
+
+    private fun processSuccessResult(result: BitcoinPricesResult) {
+        hideAllErrors()
+        result.data?.points?.let { displayBitcoinPrices(result.data.points) }
+    }
+
+    private fun hideAllErrors() {
+        Single.fromCallable {
+                viewState.showGeneraError(false)
+                viewState.showNetworkError(false)
+            }
+            .subscribeOn(schedulersProvider.main())
+            .subscribe()
+            .addTo(compositeDisposable)
     }
 
     private fun showLoadingProgress(show: Boolean) {
@@ -84,6 +110,25 @@ class BitcoinPriceGraphPresenter
             dataPoint.priceUsd.toFloat(),
             dataPoint)
         })
+
+        calcAndDisplayInfo(bitcoinPricePoints)
+    }
+
+    private fun calcAndDisplayInfo(bitcoinPricePoints: List<BitcoinPriceDataPoint>) {
+
+        Single.fromCallable { bitcoinPricePoints.map { it.priceUsd } }
+            .map { pricesList -> InfoData(pricesList.max(), pricesList.min(), pricesList.average()) }
+            .observeOn(schedulersProvider.main())
+            .map { infoData -> displayInfoData(infoData) }
+            .subscribeOn(schedulersProvider.computation())
+            .subscribe()
+            .addTo(compositeDisposable)
+    }
+
+    private fun displayInfoData(infoData: InfoData) {
+        infoData.maxPrice?.let { viewState.setMaxPriceInPeriod(it) }
+        infoData.minPrice?.let { viewState.setMinPriceInPeriod(it) }
+        infoData.averagePrice?.let { viewState.setAveragePriceInPeriod(it) }
     }
 
     override fun onDestroy() {
@@ -91,6 +136,12 @@ class BitcoinPriceGraphPresenter
         compositeDisposable.dispose()
         bitcoinPriceGraphScreenComponent = null
     }
+
+    data class InfoData (
+        val maxPrice: Double?,
+        val minPrice: Double?,
+        val averagePrice: Double?
+    )
 
     companion object {
         private const val TAG = "BitcoinPriceGraphPr"

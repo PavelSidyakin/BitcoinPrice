@@ -31,6 +31,10 @@ import com.google.android.material.chip.ChipGroup
 import kotlinx.android.synthetic.main.layout_bitcoin_price_graph.chip_group_choose_period_bitcoin_price_graph
 import kotlinx.android.synthetic.main.layout_bitcoin_price_graph.line_chart_bitcoin_price_graph
 import kotlinx.android.synthetic.main.layout_bitcoin_price_graph.progress_loading_bitcoin_price_graph
+import kotlinx.android.synthetic.main.layout_bitcoin_price_graph.text_view_error_bitcoin_price_graph
+import kotlinx.android.synthetic.main.layout_bitcoin_price_graph_info.text_view_info_avg_price
+import kotlinx.android.synthetic.main.layout_bitcoin_price_graph_info.text_view_info_max_price
+import kotlinx.android.synthetic.main.layout_bitcoin_price_graph_info.text_view_info_min_price
 import kotlinx.android.synthetic.main.layout_bitcoin_price_graph_marker.view.text_view_date_marker_bitcoin_graph
 import kotlinx.android.synthetic.main.layout_bitcoin_price_graph_marker.view.text_view_price_marker_bitcoin_graph
 import java.math.RoundingMode
@@ -55,6 +59,12 @@ class BitcoinPriceGraphFragment: MvpAppCompatFragment(), BitcoinPriceGraphView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        initChart()
+
+        text_view_error_bitcoin_price_graph.setOnClickListener { presenter.retry() }
+    }
+
+    private fun initChart() {
         val chart: LineChart = line_chart_bitcoin_price_graph
 
         chart.setNoDataText(null)
@@ -83,12 +93,7 @@ class BitcoinPriceGraphFragment: MvpAppCompatFragment(), BitcoinPriceGraphView {
 
         lineDataSet.axisDependency = YAxis.AxisDependency.LEFT
         lineDataSet.color = getColorFromTheme(R.attr.color_bitcoin_graph_line)
-//        lineDataSet.setLineWidth(1.5f);
         lineDataSet.setDrawCircles(false)
-//        lineDataSet.setDrawValues(false);
-//        lineDataSet.setFillAlpha(65);
-//        lineDataSet.setFillColor(ColorTemplate.getHoloBlue());
-//        lineDataSet.setHighLightColor(Color.rgb(244, 117, 117));
         lineDataSet.setDrawCircleHole(false)
 
         val lineData = LineData(lineDataSet)
@@ -109,8 +114,21 @@ class BitcoinPriceGraphFragment: MvpAppCompatFragment(), BitcoinPriceGraphView {
         chip.tag = displayPeriod
 
         chip.setOnCheckedChangeListener { view, isChecked ->
+            val clickedChip: Chip = view as Chip
+
             if (isChecked) {
-                onChipSelected(view as Chip)
+                onChipSelected(clickedChip)
+
+                // Prevent unchecking if the chip
+                clickedChip.isClickable = false
+
+                // Set other chips clickable
+                for (i in 0 until chipGroup.childCount) {
+                    val chipI = chipGroup.getChildAt(i) as Chip
+                    if (chipI.id != clickedChip.id) {
+                        chipI.isClickable = true
+                    }
+                }
             }
         }
 
@@ -118,15 +136,25 @@ class BitcoinPriceGraphFragment: MvpAppCompatFragment(), BitcoinPriceGraphView {
     }
 
     override fun setMaxPriceInPeriod(maxPrice: Double) {
-
+        text_view_info_max_price.text = formatPrice(maxPrice)
     }
 
-    override fun setMinPriceInPeriod(maxPrice: Double) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun showGeneraError(show: Boolean) {
+        text_view_error_bitcoin_price_graph.text = getString(R.string.bitcoin_price_graph_general_error_text)
+        text_view_error_bitcoin_price_graph.visibility = if (show) View.VISIBLE else View.INVISIBLE
+    }
+
+    override fun showNetworkError(show: Boolean) {
+        text_view_error_bitcoin_price_graph.text = getString(R.string.bitcoin_price_graph_network_error_text)
+        text_view_error_bitcoin_price_graph.visibility = if (show) View.VISIBLE else View.INVISIBLE
+    }
+
+    override fun setMinPriceInPeriod(minPrice: Double) {
+        text_view_info_min_price.text = formatPrice(minPrice)
     }
 
     override fun setAveragePriceInPeriod(averagePrice: Double) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        text_view_info_avg_price.text = formatPrice(averagePrice)
     }
 
     override fun showLoadingProgress(show: Boolean) {
@@ -174,10 +202,7 @@ class BitcoinPriceGraphFragment: MvpAppCompatFragment(), BitcoinPriceGraphView {
             val dataPoint: BitcoinPriceDataPoint = e.data as? BitcoinPriceDataPoint ?: return
 
             dateTextView.text = formatTimestamp(dataPoint.timeStamp)
-            priceTextView.text = String.format(
-                "%.2f", dataPoint.priceUsd.toBigDecimal()
-                    .setScale(2, RoundingMode.HALF_UP)
-            )
+            priceTextView.text = formatPrice(dataPoint.priceUsd)
 
             super.refreshContent(e, highlight)
         }

@@ -16,9 +16,13 @@
         <item name="color_bitcoin_graph_header">@color/color_material_purple_a100</item>
 
         <item name="color_bitcoin_graph_info">@color/color_material_purple_a100</item>
+
+        <item name="color_bitcoin_graph_error_text">@color/color_material_purple_a100</item>
+
     </style>
 
     <attr name="color_bitcoin_graph_header" format="color" />
+    <attr name="color_bitcoin_graph_error_text" format="color" />
     <attr name="color_bitcoin_graph_marker_price" format="color" />
     <attr name="color_bitcoin_graph_marker_date" format="color" />
     <attr name="color_bitcoin_graph_axis_text_price" format="color" />
@@ -27,7 +31,7 @@
     <attr name="color_bitcoin_graph_chip_select_color" format="color" />
     <attr name="color_bitcoin_graph_info" format="color" />
 
-    <style name="PeriodChip" parent="@style/Widget.MaterialComponents.Chip.Choice">
+    <style name="PeriodChip" parent="@style/Widget.MaterialComponents.Chip.Action">
         <item name="chipBackgroundColor">@android:color/transparent</item>
         <item name="android:textColor">@color/bitcoin_price_graph_chip_text_colors</item>
     </style>

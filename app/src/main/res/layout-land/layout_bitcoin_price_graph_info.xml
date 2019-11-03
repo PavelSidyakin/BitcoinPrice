@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tool="http://schemas.android.com/tools"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/linear_info_max_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/linear_info_min_price"
+        >
+
+        <TextView
+            android:id="@+id/text_view_info_max_price_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:text="@string/bitcoin_price_graph_info_max_price_label"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:textColor="?color_bitcoin_graph_info"
+            />
+
+        <TextView
+            android:id="@+id/text_view_info_max_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@id/text_view_info_max_price_label"
+            android:textColor="?color_bitcoin_graph_info"
+            tool:text="123312.88"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linear_info_min_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/linear_info_max_price"
+        app:layout_constraintEnd_toEndOf="@id/linear_info_avg_price"
+        >
+
+        <TextView
+            android:id="@+id/text_view_info_min_price_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:text="@string/bitcoin_price_graph_info_min_price_label"
+            android:textColor="?color_bitcoin_graph_info"
+            />
+
+        <TextView
+            android:id="@+id/text_view_info_min_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:textColor="?color_bitcoin_graph_info"
+            tool:text="12312.88"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linear_info_avg_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/linear_info_min_price"
+        app:layout_constraintEnd_toEndOf="parent"
+        >
+
+        <TextView
+            android:id="@+id/text_view_info_avg_price_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:text="@string/bitcoin_price_graph_info_avg_price_label"
+            android:textColor="?color_bitcoin_graph_info"
+            />
+
+        <TextView
+            android:id="@+id/text_view_info_avg_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:textColor="?color_bitcoin_graph_info"
+            tool:text="114312.88"
+            />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

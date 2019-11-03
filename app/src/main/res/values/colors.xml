@@ -15,4 +15,6 @@
     <color name="color_material_purple_300_alpha80">#CBBA68C8</color>
     <color name="color_material_orange_300_alpha80">#CDFFB74D</color>
 
+    <color name="color_material_50_alpha40">#66F3E5F5</color>
+
 </resources>

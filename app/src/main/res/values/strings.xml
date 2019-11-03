@@ -6,7 +6,7 @@
     <string name="bitcoin_price_graph_display_period_3_day">3 Days</string>
     <string name="bitcoin_price_graph_display_period_5_day">5 Days</string>
     <string name="bitcoin_price_graph_display_period_1_week">1 Week</string>
-    <string name="bitcoin_price_graph_display_period_2_week">2 Week</string>
+    <string name="bitcoin_price_graph_display_period_2_week">2 Weeks</string>
     <string name="bitcoin_price_graph_display_period_1_month">1 Month</string>
     <string name="bitcoin_price_graph_display_period_2_month">2 Months</string>
     <string name="bitcoin_price_graph_display_period_1_year">1 Years</string>
@@ -16,6 +16,9 @@
     <string name="bitcoin_price_graph_info_max_price_label">Max. price:\u0020</string>
     <string name="bitcoin_price_graph_info_min_price_label">Min. price:\u0020</string>
     <string name="bitcoin_price_graph_info_avg_price_label">Avg. price:\u0020</string>
+
+    <string name="bitcoin_price_graph_general_error_text">Unknown error.\nTap here to retry</string>
+    <string name="bitcoin_price_graph_network_error_text">Cannot load data.\nCheck internet connection.\nTap here to retry</string>
 
     <string name="content_description_bitcoin_price_graph_date_range">Date range</string>
 

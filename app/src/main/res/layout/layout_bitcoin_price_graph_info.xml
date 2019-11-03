@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    >
+
+    <LinearLayout
+        android:id="@+id/linear_info_labels_bitcoin_price_graph"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:text="@string/bitcoin_price_graph_info_max_price_label"
+            android:textColor="?color_bitcoin_graph_info"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:text="@string/bitcoin_price_graph_info_min_price_label"
+            android:textColor="?color_bitcoin_graph_info"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:text="@string/bitcoin_price_graph_info_avg_price_label"
+            android:textColor="?color_bitcoin_graph_info"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linear_info_values_bitcoin_price_graph"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        >
+        <TextView
+            android:id="@+id/text_view_info_max_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:textColor="?color_bitcoin_graph_info"
+            />
+
+        <TextView
+            android:id="@+id/text_view_info_min_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:textColor="?color_bitcoin_graph_info"
+            />
+
+        <TextView
+            android:id="@+id/text_view_info_avg_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:textColor="?color_bitcoin_graph_info"
+            />
+    </LinearLayout>
+
+</LinearLayout>
