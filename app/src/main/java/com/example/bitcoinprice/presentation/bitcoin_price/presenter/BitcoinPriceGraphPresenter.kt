@@ -15,7 +15,6 @@ import com.example.bitcoinprice.utils.rx.SchedulersProvider
 import com.github.mikephil.charting.data.Entry
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.addTo
 import javax.inject.Inject
 
@@ -77,14 +76,14 @@ class BitcoinPriceGraphPresenter
     private fun processRequestBitcoinPricesResult(result: BitcoinPricesResult) {
         when (result.resultCode) {
             BitcoinPricesResultCode.OK -> processSuccessResult(result)
-            BitcoinPricesResultCode.NETWORK_ERROR -> viewState.showNetworkError(true)
-            BitcoinPricesResultCode.GENERAL_ERROR -> viewState.showGeneraError(true)
+            BitcoinPricesResultCode.NETWORK_ERROR -> runOnMainThread { viewState.showNetworkError(true) }
+            BitcoinPricesResultCode.GENERAL_ERROR -> runOnMainThread { viewState.showGeneraError(true) }
         }
     }
 
     private fun processSuccessResult(result: BitcoinPricesResult) {
         hideAllErrors()
-        result.data?.points?.let { displayBitcoinPrices(result.data.points) }
+        result.data?.points?.let { processBitcoinPrices(result.data.points) }
     }
 
     private fun hideAllErrors() {
@@ -98,7 +97,7 @@ class BitcoinPriceGraphPresenter
         runOnMainThread { viewState.showLoadingProgress(show)  }
     }
 
-    private fun displayBitcoinPrices(bitcoinPricePoints: List<BitcoinPriceDataPoint>) {
+    private fun processBitcoinPrices(bitcoinPricePoints: List<BitcoinPriceDataPoint>) {
         viewState.setGraphPoints(bitcoinPricePoints.map { dataPoint -> Entry(
             dataPoint.timeStamp.toFloat(),
             dataPoint.priceUsd.toFloat(),
