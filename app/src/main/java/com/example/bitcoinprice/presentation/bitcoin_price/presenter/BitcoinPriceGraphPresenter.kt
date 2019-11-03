@@ -8,9 +8,12 @@ import com.example.bitcoinprice.domain.bitcoin_price.BitcoinPriceInteractor
 import com.example.bitcoinprice.model.domain.bitcoin_price.BitcoinPriceDataPoint
 import com.example.bitcoinprice.model.domain.bitcoin_price.BitcoinPricesResult
 import com.example.bitcoinprice.model.domain.bitcoin_price.BitcoinPricesResultCode
+import com.example.bitcoinprice.presentation.bitcoin_price.model.DisplayPeriod
 import com.example.bitcoinprice.presentation.bitcoin_price.view.BitcoinPriceGraphView
+import com.example.bitcoinprice.utils.logs.log
 import com.example.bitcoinprice.utils.rx.SchedulersProvider
 import com.github.mikephil.charting.data.Entry
+import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import javax.inject.Inject
@@ -27,7 +30,7 @@ class BitcoinPriceGraphPresenter
 
     private var bitcoinPriceGraphScreenComponent: BitcoinPriceGraphScreenComponent? = null
 
-    private var currentPeriodBeforeTodayDays: Int = 0
+    private var currentDisplayPeriod: DisplayPeriod = DisplayPeriod.DAY_3
 
     private var compositeDisposable = CompositeDisposable()
 
@@ -40,13 +43,23 @@ class BitcoinPriceGraphPresenter
 
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
-        currentPeriodBeforeTodayDays = 10
+
+        DisplayPeriod.values().forEach { viewState.addDisplayPeriod(it) }
+        viewState.selectDisplayPeriod(currentDisplayPeriod)
+    }
+
+    fun onDisplayPeriodSelected(displayPeriod: DisplayPeriod) {
+        log { i(TAG, "BitcoinPriceGraphPresenter.onDisplayPeriodSelected(). displayPeriod = [${displayPeriod}]") }
+
+        currentDisplayPeriod = displayPeriod
         requestBitcoinPricesAndDisplay()
     }
 
     private fun requestBitcoinPricesAndDisplay() {
-        bitcoinPriceInteractor.requestBitcoinMarketPrices(currentPeriodBeforeTodayDays)
+        bitcoinPriceInteractor.requestBitcoinMarketPrices(currentDisplayPeriod.timePeriod)
                 // TODO: filter errors
+            .doOnSubscribe { showLoadingProgress(true) }
+            .doFinally { showLoadingProgress(false) }
             .subscribe { result -> result?.let { processRequestBitcoinPricesResult(result) } }
             .addTo(compositeDisposable)
     }
@@ -58,12 +71,28 @@ class BitcoinPriceGraphPresenter
 
     }
 
+    private fun showLoadingProgress(show: Boolean) {
+        Single.fromCallable { viewState.showLoadingProgress(show) }
+            .subscribeOn(schedulersProvider.main())
+            .subscribe()
+            .addTo(compositeDisposable)
+    }
+
     private fun displayBitcoinPrices(bitcoinPricePoints: List<BitcoinPriceDataPoint>) {
-        viewState.setGraphPoints(bitcoinPricePoints.map { Entry(it.timeStamp.toFloat(), it.priceUsd.toFloat()) })
+        viewState.setGraphPoints(bitcoinPricePoints.map { dataPoint -> Entry(
+            dataPoint.timeStamp.toFloat(),
+            dataPoint.priceUsd.toFloat(),
+            dataPoint)
+        })
     }
 
     override fun onDestroy() {
         super.onDestroy()
+        compositeDisposable.dispose()
         bitcoinPriceGraphScreenComponent = null
+    }
+
+    companion object {
+        private const val TAG = "BitcoinPriceGraphPr"
     }
 }

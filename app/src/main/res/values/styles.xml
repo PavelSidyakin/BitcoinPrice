@@ -1,11 +1,40 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AppTheme" parent="Theme.MaterialComponents.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="color_bitcoin_graph_line">@color/color_material_purple_500</item>
+
+        <item name="color_bitcoin_graph_marker_price">@color/color_material_purple_a100</item>
+        <item name="color_bitcoin_graph_marker_date">@color/color_material_orange_a100</item>
+
+        <item name="color_bitcoin_graph_axis_text_price">@color/color_material_purple_300_alpha80</item>
+        <item name="color_bitcoin_graph_axis_text_date">@color/color_material_orange_300_alpha80</item>
+
+        <item name="color_bitcoin_graph_chip_select_color">@color/color_material_orange_300_alpha80</item>
+
+        <item name="color_bitcoin_graph_header">@color/color_material_purple_a100</item>
+
+        <item name="color_bitcoin_graph_info">@color/color_material_purple_a100</item>
     </style>
+
+    <attr name="color_bitcoin_graph_header" format="color" />
+    <attr name="color_bitcoin_graph_marker_price" format="color" />
+    <attr name="color_bitcoin_graph_marker_date" format="color" />
+    <attr name="color_bitcoin_graph_axis_text_price" format="color" />
+    <attr name="color_bitcoin_graph_axis_text_date" format="color" />
+    <attr name="color_bitcoin_graph_line" format="color" />
+    <attr name="color_bitcoin_graph_chip_select_color" format="color" />
+    <attr name="color_bitcoin_graph_info" format="color" />
+
+    <style name="PeriodChip" parent="@style/Widget.MaterialComponents.Chip.Choice">
+        <item name="chipBackgroundColor">@android:color/transparent</item>
+        <item name="android:textColor">@color/bitcoin_price_graph_chip_text_colors</item>
+    </style>
+
+    <style name="LoadingProgressBar" parent="@style/Widget.AppCompat.ProgressBar">
+        <item name="android:indeterminateTint">@color/color_material_purple_500</item>
+    </style>
+
 
 </resources>

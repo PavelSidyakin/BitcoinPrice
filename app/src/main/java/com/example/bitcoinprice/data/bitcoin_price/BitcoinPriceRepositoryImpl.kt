@@ -12,6 +12,8 @@ import com.example.bitcoinprice.model.data.bitcoin_price.BitcoinPriceRequestData
 import com.example.bitcoinprice.model.data.bitcoin_price.BitcoinPricesRequestResult
 import com.example.bitcoinprice.model.data.bitcoin_price.BitcoinPricesRequestResultCode
 import com.example.bitcoinprice.model.data.bitcoin_price.BitcoinPricesRequestResultData
+import com.example.bitcoinprice.model.domain.TimePeriod
+import com.example.bitcoinprice.model.domain.TimePeriodUnit
 import com.example.bitcoinprice.utils.logs.log
 import io.reactivex.Single
 import javax.inject.Inject
@@ -22,15 +24,10 @@ class BitcoinPriceRepositoryImpl
     : BitcoinPriceRepository {
 
 
-    override fun requestBitcoinMarketPrices(periodBeforeTodayDays: Int): Single<BitcoinPricesRequestResult> {
-        return blockChainDataProvider.requestBitcoinMarketPrices(
-            Time(
-                periodBeforeTodayDays,
-                TimeUnit.DAY
-            )
-        )
+    override fun requestBitcoinMarketPrices(periodBeforeToday: TimePeriod): Single<BitcoinPricesRequestResult> {
+        return blockChainDataProvider.requestBitcoinMarketPrices(convertTimePeriod2Time(periodBeforeToday))
             .map { convertBlockChainRequestMarketPricesResult2BitcoinPricesRequestResult(it) }
-            .doOnSubscribe { log { i(TAG, "BitcoinPriceRepositoryImpl.requestBitcoinMarketPrices(): Subscribe. periodBeforeTodayDays = [${periodBeforeTodayDays}]") } }
+            .doOnSubscribe { log { i(TAG, "BitcoinPriceRepositoryImpl.requestBitcoinMarketPrices(): Subscribe. periodBeforeTodayDays = [${periodBeforeToday}]") } }
             .doOnSuccess { log { i(TAG, "BitcoinPriceRepositoryImpl.requestBitcoinMarketPrices(): Success. Result: $it") } }
             .doOnError { log { w(TAG, "BitcoinPriceRepositoryImpl.requestBitcoinMarketPrices(): Error", it) } }
             .onErrorResumeNext { processError(it) }
@@ -59,6 +56,15 @@ class BitcoinPriceRepositoryImpl
                     null
                 )
             )
+        }
+    }
+
+    private fun convertTimePeriod2Time(timePeriod: TimePeriod): Time {
+        return when(timePeriod.timePeriodUnit) {
+            TimePeriodUnit.DAY -> Time(timePeriod.count, TimeUnit.DAY)
+            TimePeriodUnit.MONTH -> Time(timePeriod.count * 4, TimeUnit.WEEK)
+            TimePeriodUnit.YEAR -> Time(timePeriod.count, TimeUnit.YEAR)
+            TimePeriodUnit.ALL -> Time(0, TimeUnit.ALL)
         }
     }
 

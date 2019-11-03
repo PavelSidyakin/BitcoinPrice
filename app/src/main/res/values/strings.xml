@@ -1,6 +1,22 @@
 <resources>
     <string name="app_name">Bitcoin Price</string>
 
-    <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="bitcoin_price_graph_header">Bitcoin Market Price (USD)</string>
+
+    <string name="bitcoin_price_graph_display_period_3_day">3 Days</string>
+    <string name="bitcoin_price_graph_display_period_5_day">5 Days</string>
+    <string name="bitcoin_price_graph_display_period_1_week">1 Week</string>
+    <string name="bitcoin_price_graph_display_period_2_week">2 Week</string>
+    <string name="bitcoin_price_graph_display_period_1_month">1 Month</string>
+    <string name="bitcoin_price_graph_display_period_2_month">2 Months</string>
+    <string name="bitcoin_price_graph_display_period_1_year">1 Years</string>
+    <string name="bitcoin_price_graph_display_period_3_year">3 Years</string>
+    <string name="bitcoin_price_graph_display_period_all">All Time</string>
+
+    <string name="bitcoin_price_graph_info_max_price_label">Max. price:\u0020</string>
+    <string name="bitcoin_price_graph_info_min_price_label">Min. price:\u0020</string>
+    <string name="bitcoin_price_graph_info_avg_price_label">Avg. price:\u0020</string>
+
+    <string name="content_description_bitcoin_price_graph_date_range">Date range</string>
+
 </resources>

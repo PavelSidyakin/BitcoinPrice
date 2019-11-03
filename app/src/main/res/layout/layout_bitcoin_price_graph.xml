@@ -2,13 +2,160 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tool="http://schemas.android.com/tools"
+    android:layout_marginStart="8dp"
+    android:layout_marginEnd="8dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <com.github.mikephil.charting.charts.LineChart
-        android:id="@+id/line_chart_bitcoin_price_graph"
+    <TextView
+        android:id="@+id/text_view_header_bitcoin_price_graph"
         android:layout_width="match_parent"
-        android:layout_height="256dp"
+        android:layout_height="0dp"
+        android:text="@string/bitcoin_price_graph_header"
+        android:layout_marginTop="16dp"
+        android:textColor="?color_bitcoin_graph_header"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:textAlignment="center"
         />
+
+    <FrameLayout
+        android:id="@+id/frame_with_chart_bitcoin_price_graph"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/text_view_header_bitcoin_price_graph"
+        app:layout_constraintBottom_toTopOf="@id/linear_info_labels_bitcoin_price_graph"
+        >
+
+        <com.github.mikephil.charting.charts.LineChart
+            android:id="@+id/line_chart_bitcoin_price_graph"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+
+        <ProgressBar
+            android:id="@+id/progress_loading_bitcoin_price_graph"
+            style="@style/LoadingProgressBar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingStart="80dp"
+            android:paddingEnd="80dp"
+            android:paddingTop="72dp"
+            android:paddingBottom="72dp"
+            android:indeterminate="true"
+            android:visibility="invisible"
+            />
+
+    </FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/linear_info_labels_bitcoin_price_graph"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/linear_with_chips_bitcoin_price_graph"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/bitcoin_price_graph_info_max_price_label"
+            android:textColor="?color_bitcoin_graph_info"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/bitcoin_price_graph_info_min_price_label"
+            android:textColor="?color_bitcoin_graph_info"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/bitcoin_price_graph_info_avg_price_label"
+            android:textColor="?color_bitcoin_graph_info"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linear_info_values_bitcoin_price_graph"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintStart_toEndOf="@id/linear_info_labels_bitcoin_price_graph"
+        app:layout_constraintBottom_toTopOf="@id/linear_with_chips_bitcoin_price_graph"
+        >
+        <TextView
+            android:id="@+id/text_view_info_max_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="?color_bitcoin_graph_info"
+            />
+
+        <TextView
+            android:id="@+id/text_view_info_min_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="?color_bitcoin_graph_info"
+            />
+
+        <TextView
+            android:id="@+id/text_view_info_avg_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="?color_bitcoin_graph_info"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linear_with_chips_bitcoin_price_graph"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        >
+
+        <ImageView
+            android:id="@+id/image_date_range_bitcoin_price_graph"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:src="@drawable/ic_date_range"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="4dp"
+            android:contentDescription="@string/content_description_bitcoin_price_graph_date_range"
+            />
+
+        <HorizontalScrollView
+            android:id="@+id/scroll_with_chips_bitcoin_price_graph"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fadeScrollbars="false"
+            >
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chip_group_choose_period_bitcoin_price_graph"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:singleSelection="true"
+                />
+
+        </HorizontalScrollView>
+
+
+    </LinearLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

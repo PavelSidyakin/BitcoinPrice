@@ -7,5 +7,6 @@ enum class TimeUnit(val value: String) {
     DAY("days"),
     WEEK("week"),
     YEAR("year"),
+    ALL("all"),
 
 }

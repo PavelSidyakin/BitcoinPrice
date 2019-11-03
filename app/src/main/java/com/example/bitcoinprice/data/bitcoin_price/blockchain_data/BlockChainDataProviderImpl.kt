@@ -2,6 +2,7 @@ package com.example.bitcoinprice.data.bitcoin_price.blockchain_data
 
 import com.example.bitcoinprice.data.bitcoin_price.blockchain_data.model.json.Result
 import com.example.bitcoinprice.data.bitcoin_price.blockchain_data.model.Time
+import com.example.bitcoinprice.data.bitcoin_price.blockchain_data.model.TimeUnit
 import com.example.bitcoinprice.utils.logs.log
 import com.example.bitcoinprice.utils.rx.SchedulersProvider
 import io.reactivex.Single
@@ -78,7 +79,11 @@ class BlockChainDataProviderImpl
     }
 
     private fun Time.asString(): String {
-        return "${unitCount}${timeUnit.value}"
+        return if (timeUnit == TimeUnit.ALL) {
+            timeUnit.value
+        } else {
+            "${unitCount}${timeUnit.value}"
+        }
     }
 
     companion object {

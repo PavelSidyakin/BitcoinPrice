@@ -5,6 +5,7 @@ import com.example.bitcoinprice.domain.bitcoin_price.data.BitcoinPriceRepository
 import com.example.bitcoinprice.model.data.bitcoin_price.BitcoinPricesRequestResult
 import com.example.bitcoinprice.model.data.bitcoin_price.BitcoinPricesRequestResultCode
 import com.example.bitcoinprice.model.data.bitcoin_price.BitcoinPricesRequestResultData
+import com.example.bitcoinprice.model.domain.TimePeriod
 import com.example.bitcoinprice.model.domain.bitcoin_price.BitcoinPriceDataPoint
 import com.example.bitcoinprice.model.domain.bitcoin_price.BitcoinPricesResult
 import com.example.bitcoinprice.model.domain.bitcoin_price.BitcoinPricesResultCode
@@ -24,28 +25,28 @@ class BitcoinPriceInteractorImpl
     )
     : BitcoinPriceInteractor {
 
-    override fun requestBitcoinMarketPrices(periodBeforeTodayDays: Int): Single<BitcoinPricesResult> {
-        return bitcoinPriceCacheRepository.findCachedBitcoinMarketPrices(periodBeforeTodayDays)
+    override fun requestBitcoinMarketPrices(periodBeforeToday: TimePeriod): Single<BitcoinPricesResult> {
+        return bitcoinPriceCacheRepository.findCachedBitcoinMarketPrices(periodBeforeToday)
             .flatMap { optionalResult ->
                 if (optionalResult.isPresent) {
                     Single.just(optionalResult.get())
                 } else {
-                    performRealRequestAndPutInCache(periodBeforeTodayDays)
+                    performRealRequestAndPutInCache(periodBeforeToday)
                 }
             }
             .map { requestResult -> convertBitcoinPricesRequestResult2BitcoinPricesResult(requestResult) }
             .subscribeOn(schedulersProvider.io())
-            .doOnSubscribe { log { i(TAG, "BitcoinPriceInteractorImpl.requestBitcoinMarketPrices(): Subscribe. periodBeforeTodayDays = [${periodBeforeTodayDays}]") } }
+            .doOnSubscribe { log { i(TAG, "BitcoinPriceInteractorImpl.requestBitcoinMarketPrices(): Subscribe. periodBeforeTodayDays = [${periodBeforeToday}]") } }
             .doOnSuccess { log { i(TAG, "BitcoinPriceInteractorImpl.requestBitcoinMarketPrices(): Success. Result: $it") } }
             .doOnError { log { w(TAG, "BitcoinPriceInteractorImpl.requestBitcoinMarketPrices(): Error", it) } }
 
     }
 
-    private fun performRealRequestAndPutInCache(periodBeforeTodayDays: Int): Single<BitcoinPricesRequestResult> {
-        return bitcoinPriceRepository.requestBitcoinMarketPrices(periodBeforeTodayDays)
+    private fun performRealRequestAndPutInCache(periodBeforeToday: TimePeriod): Single<BitcoinPricesRequestResult> {
+        return bitcoinPriceRepository.requestBitcoinMarketPrices(periodBeforeToday)
             .flatMap { result ->
                 if (result.resultCode == BitcoinPricesRequestResultCode.OK) {
-                    bitcoinPriceCacheRepository.putBitcoinMarketPrices(periodBeforeTodayDays, result)
+                    bitcoinPriceCacheRepository.putBitcoinMarketPrices(periodBeforeToday, result)
                         .toSingleDefault(result)
                 } else {
                     Single.just(result)

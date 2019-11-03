@@ -3,6 +3,7 @@ package com.example.bitcoinprice.data.bitcoin_price
 import android.util.LruCache
 import com.example.bitcoinprice.domain.bitcoin_price.data.BitcoinPriceCacheRepository
 import com.example.bitcoinprice.model.data.bitcoin_price.BitcoinPricesRequestResult
+import com.example.bitcoinprice.model.domain.TimePeriod
 import com.example.bitcoinprice.utils.logs.log
 import io.reactivex.Completable
 import io.reactivex.Single
@@ -15,24 +16,24 @@ class BitcoinPriceCacheRepositoryImpl
     constructor()
     : BitcoinPriceCacheRepository {
 
-    private val lruCache = LruCache<Int, CacheItem>(7)
+    private val lruCache = LruCache<TimePeriod, CacheItem>(7)
 
-    override fun findCachedBitcoinMarketPrices(periodBeforeTodayDays: Int): Single<Optional<BitcoinPricesRequestResult>> {
-        return Single.fromCallable { Optional.ofNullable(lruCache[periodBeforeTodayDays]) }
-            .map { cacheItem -> processCacheItem(periodBeforeTodayDays, cacheItem) }
-            .doOnSubscribe { log { i(TAG, "BitcoinPriceCacheRepositoryImpl.findCachedBitcoinMarketPrices(): Subscribe. periodBeforeTodayDays = [${periodBeforeTodayDays}]") } }
+    override fun findCachedBitcoinMarketPrices(periodBeforeToday: TimePeriod): Single<Optional<BitcoinPricesRequestResult>> {
+        return Single.fromCallable { Optional.ofNullable(lruCache[periodBeforeToday]) }
+            .map { cacheItem -> processCacheItem(periodBeforeToday, cacheItem) }
+            .doOnSubscribe { log { i(TAG, "BitcoinPriceCacheRepositoryImpl.findCachedBitcoinMarketPrices(): Subscribe. periodBeforeTodayDays = [${periodBeforeToday}]") } }
             .doOnSuccess { log { i(TAG, "BitcoinPriceCacheRepositoryImpl.findCachedBitcoinMarketPrices(): Success. Result: $it") } }
             .doOnError { log { w(TAG, "BitcoinPriceCacheRepositoryImpl.findCachedBitcoinMarketPrices(): Error", it) } }
     }
 
-    private fun processCacheItem(periodBeforeTodayDays: Int, cacheItem: Optional<CacheItem>): Optional<BitcoinPricesRequestResult> {
+    private fun processCacheItem(periodBeforeToday: TimePeriod, cacheItem: Optional<CacheItem>): Optional<BitcoinPricesRequestResult> {
         if (cacheItem.isPresent) {
             log { i(TAG, "BitcoinPriceCacheRepositoryImpl.processCacheItem(). found cacheItem = [${cacheItem}]") }
             if ((System.currentTimeMillis() - cacheItem.get().timestamp) <= MAX_LIVE_TIME_OF_RESULT_MS) {
                 return Optional.of(cacheItem.get().result)
             } else {
                 log { i(TAG, "BitcoinPriceCacheRepositoryImpl.processCacheItem(). cacheItem is expired") }
-                lruCache.remove(periodBeforeTodayDays)
+                lruCache.remove(periodBeforeToday)
             }
         } else {
             log { i(TAG, "BitcoinPriceCacheRepositoryImpl.processCacheItem(). cacheItem is not found") }
@@ -41,14 +42,14 @@ class BitcoinPriceCacheRepositoryImpl
         return Optional.empty()
     }
 
-    override fun putBitcoinMarketPrices(periodBeforeTodayDays: Int, result: BitcoinPricesRequestResult): Completable {
-        return Completable.fromCallable { lruCache.put(periodBeforeTodayDays,
+    override fun putBitcoinMarketPrices(periodBeforeToday: TimePeriod, result: BitcoinPricesRequestResult): Completable {
+        return Completable.fromCallable { lruCache.put(periodBeforeToday,
             CacheItem(
                 System.currentTimeMillis(),
                 result
             )
         ) }
-            .doOnSubscribe { log { i(TAG, "BitcoinPriceCacheRepositoryImpl.putBitcoinMarketPrices(): Subscribe. periodBeforeTodayDays = [${periodBeforeTodayDays}], result = [${result}]") } }
+            .doOnSubscribe { log { i(TAG, "BitcoinPriceCacheRepositoryImpl.putBitcoinMarketPrices(): Subscribe. periodBeforeTodayDays = [${periodBeforeToday}], result = [${result}]") } }
             .doOnComplete { log { i(TAG, "BitcoinPriceCacheRepositoryImpl.putBitcoinMarketPrices(): Complete") } }
             .doOnError { log { w(TAG, "BitcoinPriceCacheRepositoryImpl.putBitcoinMarketPrices(): Error", it) } }
     }
