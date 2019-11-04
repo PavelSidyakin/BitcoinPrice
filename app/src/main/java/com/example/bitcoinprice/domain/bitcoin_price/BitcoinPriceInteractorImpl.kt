@@ -16,14 +16,12 @@ import io.reactivex.Single
 import javax.inject.Inject
 
 class BitcoinPriceInteractorImpl
-
-    @Inject
-    constructor(
-        private val bitcoinPriceCacheRepository: BitcoinPriceCacheRepository,
-        private val bitcoinPriceRepository: BitcoinPriceRepository,
-        private val schedulersProvider: SchedulersProvider
-    )
-    : BitcoinPriceInteractor {
+@Inject
+constructor(
+    private val bitcoinPriceCacheRepository: BitcoinPriceCacheRepository,
+    private val bitcoinPriceRepository: BitcoinPriceRepository,
+    private val schedulersProvider: SchedulersProvider
+) : BitcoinPriceInteractor {
 
     override fun requestBitcoinMarketPrices(periodBeforeToday: TimePeriod): Single<BitcoinPricesResult> {
         return bitcoinPriceCacheRepository.findCachedBitcoinMarketPrices(periodBeforeToday)
@@ -59,12 +57,14 @@ class BitcoinPriceInteractorImpl
     }
 
     private fun convertBitcoinPricesRequestResult2BitcoinPricesResult(requestResult: BitcoinPricesRequestResult): BitcoinPricesResult {
-        return BitcoinPricesResult(convertBitcoinPricesRequestResultCode2BitcoinPricesResultCode(requestResult.resultCode),
-            convertBitcoinPricesRequestResultData2BitcoinPricesResultData(requestResult.data))
+        return BitcoinPricesResult(
+            convertBitcoinPricesRequestResultCode2BitcoinPricesResultCode(requestResult.resultCode),
+            convertBitcoinPricesRequestResultData2BitcoinPricesResultData(requestResult.data)
+        )
     }
 
     private fun convertBitcoinPricesRequestResultCode2BitcoinPricesResultCode(requestResultCode: BitcoinPricesRequestResultCode): BitcoinPricesResultCode {
-        return when(requestResultCode) {
+        return when (requestResultCode) {
             BitcoinPricesRequestResultCode.OK -> BitcoinPricesResultCode.OK
             BitcoinPricesRequestResultCode.NETWORK_ERROR -> BitcoinPricesResultCode.NETWORK_ERROR
             BitcoinPricesRequestResultCode.GENERAL_ERROR -> BitcoinPricesResultCode.GENERAL_ERROR
@@ -76,8 +76,7 @@ class BitcoinPriceInteractorImpl
         return requestResultData?.let { BitcoinPricesResultData(requestResultData.points?.map { BitcoinPriceDataPoint(it.timeStamp, it.priceUsd) }) }
     }
 
-    companion object {
-        const val TAG = "BitcoinPriceInteractor"
-
+    private companion object {
+        private const val TAG = "BitcoinPriceInteractor"
     }
 }

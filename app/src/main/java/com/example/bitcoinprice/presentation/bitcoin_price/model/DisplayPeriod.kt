@@ -4,6 +4,10 @@ import com.example.bitcoinprice.R
 import com.example.bitcoinprice.model.domain.TimePeriod
 import com.example.bitcoinprice.model.domain.TimePeriodUnit
 
+/**
+ * Time periods displayed on UI.
+ *
+ */
 enum class DisplayPeriod(val descriptionResId: Int, val timePeriod: TimePeriod) {
 
     DAY_3(R.string.bitcoin_price_graph_display_period_3_day, TimePeriod(3, TimePeriodUnit.DAY)),

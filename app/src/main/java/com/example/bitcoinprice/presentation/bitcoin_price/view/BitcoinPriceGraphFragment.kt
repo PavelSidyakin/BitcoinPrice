@@ -43,7 +43,7 @@ import java.text.DateFormat
 import java.util.Date
 
 
-class BitcoinPriceGraphFragment: MvpAppCompatFragment(), BitcoinPriceGraphView {
+class BitcoinPriceGraphFragment : MvpAppCompatFragment(), BitcoinPriceGraphView {
 
     @InjectPresenter
     lateinit var presenter: BitcoinPriceGraphPresenter

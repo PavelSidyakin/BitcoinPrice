@@ -17,9 +17,8 @@ import java.io.IOException
 import javax.inject.Inject
 
 class BlockChainDataProviderImpl
-    @Inject
-    constructor(private val schedulersProvider: SchedulersProvider):
-    BlockChainDataProvider {
+@Inject
+constructor(private val schedulersProvider: SchedulersProvider) : BlockChainDataProvider {
 
     private val retrofit: Retrofit by lazy { createRetrofit() }
 
@@ -36,17 +35,9 @@ class BlockChainDataProviderImpl
     }
 
     private fun handleError(throwable: Throwable): Single<Result> {
-        return when(throwable) {
-            is IOException -> Single.error(
-                BlockChainDataError(
-                    BlockChainDataError.Code.NETWORK_ERROR
-                )
-            )
-            else -> Single.error(
-                BlockChainDataError(
-                    BlockChainDataError.Code.GENERAL_ERROR
-                )
-            )
+        return when (throwable) {
+            is IOException -> Single.error(BlockChainDataError(BlockChainDataError.Code.NETWORK_ERROR))
+            else -> Single.error(BlockChainDataError(BlockChainDataError.Code.GENERAL_ERROR))
         }
     }
 
@@ -55,6 +46,7 @@ class BlockChainDataProviderImpl
             log { i(TAG, message) }
         }
         interceptor.level = HttpLoggingInterceptor.Level.BODY
+
         val client: OkHttpClient = OkHttpClient.Builder()
             .addInterceptor(interceptor)
             .build()
@@ -73,9 +65,10 @@ class BlockChainDataProviderImpl
 
     private interface RequestMarketPricesService {
         @GET("market-price/")
-        fun requestMarketPrices(@Query("timespan") timeSpan: String,
-                                @Query("rollingAverage") rollingAverage: String?)
-                : Single<Result>
+        fun requestMarketPrices(
+            @Query("timespan") timeSpan: String,
+            @Query("rollingAverage") rollingAverage: String?
+        ): Single<Result>
     }
 
     private fun Time.asString(): String {
@@ -86,7 +79,7 @@ class BlockChainDataProviderImpl
         }
     }
 
-    companion object {
+    private companion object {
         private const val TAG = "BlockChainDataProvider"
     }
 

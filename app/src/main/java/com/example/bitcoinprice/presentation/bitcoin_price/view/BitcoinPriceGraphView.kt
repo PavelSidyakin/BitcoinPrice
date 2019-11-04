@@ -15,7 +15,7 @@ interface BitcoinPriceGraphView : MvpView {
     @StateStrategyType(AddToEndStrategy::class)
     fun addDisplayPeriod(displayPeriod: DisplayPeriod)
 
-    @StateStrategyType(AddToEndSingleStrategy ::class)
+    @StateStrategyType(AddToEndSingleStrategy::class)
     fun showLoadingProgress(show: Boolean)
 
     @StateStrategyType(AddToEndSingleStrategy::class)

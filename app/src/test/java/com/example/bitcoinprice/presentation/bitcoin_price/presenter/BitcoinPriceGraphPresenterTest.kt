@@ -47,7 +47,8 @@ class `BitcoinPriceGraphPresenter Tests` {
         listOf(
             BitcoinPriceDataPoint(pointsTime[0], pointsPrice[0]),
             BitcoinPriceDataPoint(pointsTime[1], pointsPrice[1])
-        ))
+        )
+    )
     private val expectedListOfEntries = listOf(
         Entry(pointsTime[0].toFloat(), pointsPrice[0].toFloat(), BitcoinPriceDataPoint(pointsTime[0], pointsPrice[0])),
         Entry(pointsTime[1].toFloat(), pointsPrice[1].toFloat(), BitcoinPriceDataPoint(pointsTime[1], pointsPrice[1]))
@@ -122,7 +123,6 @@ class `BitcoinPriceGraphPresenter Tests` {
             verify(view, never()).showGeneraError(true)
             verify(view, never()).showNetworkError(true)
         }
-
     }
 
     @Nested
@@ -178,7 +178,6 @@ class `BitcoinPriceGraphPresenter Tests` {
             // verify 3
             verifyGraphDataAndInfoData()
         }
-
     }
 
     @AfterEach
@@ -228,8 +227,6 @@ class `BitcoinPriceGraphPresenter Tests` {
             return false
 
         return abs(e.y - this.y) <= Utils.FLOAT_EPSILON
-
     }
-
 
 }

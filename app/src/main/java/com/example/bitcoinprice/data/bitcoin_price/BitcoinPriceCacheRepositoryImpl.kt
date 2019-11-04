@@ -13,12 +13,10 @@ import java.util.Optional
 import javax.inject.Inject
 
 class BitcoinPriceCacheRepositoryImpl
-
-    constructor(
-        private val lruCache: LruCache<TimePeriod, CacheItem>,
-        private val timeProvider: TimeProvider
-    )
-    : BitcoinPriceCacheRepository {
+constructor(
+    private val lruCache: LruCache<TimePeriod, CacheItem>,
+    private val timeProvider: TimeProvider
+) : BitcoinPriceCacheRepository {
 
     @Inject
     constructor(timeProvider: TimeProvider) : this(LruCache<TimePeriod, CacheItem>(7), timeProvider)
@@ -48,9 +46,7 @@ class BitcoinPriceCacheRepositoryImpl
     }
 
     override fun putBitcoinMarketPrices(periodBeforeToday: TimePeriod, result: BitcoinPricesRequestResult): Completable {
-        return Completable.fromCallable { lruCache.put(periodBeforeToday,
-                CacheItem(timeProvider.getCurrentTimeMillis(), result))
-            }
+        return Completable.fromCallable { lruCache.put(periodBeforeToday, CacheItem(timeProvider.getCurrentTimeMillis(), result)) }
             .doOnSubscribe { log { i(TAG, "BitcoinPriceCacheRepositoryImpl.putBitcoinMarketPrices(): Subscribe. periodBeforeTodayDays = [${periodBeforeToday}], result = [${result}]") } }
             .doOnComplete { log { i(TAG, "BitcoinPriceCacheRepositoryImpl.putBitcoinMarketPrices(): Complete") } }
             .doOnError { log { w(TAG, "BitcoinPriceCacheRepositoryImpl.putBitcoinMarketPrices(): Error", it) } }
@@ -63,6 +59,7 @@ class BitcoinPriceCacheRepositoryImpl
         val result: BitcoinPricesRequestResult
     )
 
+    @VisibleForTesting
     companion object {
         private const val TAG = "BitcoinPriceCache"
 

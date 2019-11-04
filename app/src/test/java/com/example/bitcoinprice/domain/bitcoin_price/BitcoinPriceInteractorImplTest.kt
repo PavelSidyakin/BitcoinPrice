@@ -47,14 +47,18 @@ class `BitcoinPriceInteractorImpl Tests` {
     private val point1Price = 22.0
 
     private val requestResultData = BitcoinPricesRequestResultData(
-        listOf(BitcoinPriceRequestDataPoint(point0Time, point0Price),
+        listOf(
+            BitcoinPriceRequestDataPoint(point0Time, point0Price),
             BitcoinPriceRequestDataPoint(point1Time, point1Price)
-        ))
+        )
+    )
 
     private val resultData = BitcoinPricesResultData(
-        listOf(BitcoinPriceDataPoint(point0Time, point0Price),
+        listOf(
+            BitcoinPriceDataPoint(point0Time, point0Price),
             BitcoinPriceDataPoint(point1Time, point1Price)
-        ))
+        )
+    )
 
     @BeforeEach
     fun beforeEachTest() {
@@ -62,9 +66,11 @@ class `BitcoinPriceInteractorImpl Tests` {
 
         MockitoAnnotations.initMocks(this)
 
-        bitcoinPriceInteractor = BitcoinPriceInteractorImpl(bitcoinPriceCacheRepository,
+        bitcoinPriceInteractor = BitcoinPriceInteractorImpl(
+            bitcoinPriceCacheRepository,
             bitcoinPriceRepository,
-            SchedulersProviderStub())
+            SchedulersProviderStub()
+        )
 
     }
 
@@ -100,8 +106,11 @@ class `BitcoinPriceInteractorImpl Tests` {
             fun `with GENERAL_ERROR, should return GENERAL_ERROR`() {
                 // when
                 whenever(bitcoinPriceRepository.requestBitcoinMarketPrices(timePeriod))
-                    .thenReturn(Single.just(
-                        BitcoinPricesRequestResult(BitcoinPricesRequestResultCode.GENERAL_ERROR, null)))
+                    .thenReturn(
+                        Single.just(
+                            BitcoinPricesRequestResult(BitcoinPricesRequestResultCode.GENERAL_ERROR, null)
+                        )
+                    )
 
                 // action
                 bitcoinPriceInteractor.requestBitcoinMarketPrices(timePeriod)
@@ -115,8 +124,11 @@ class `BitcoinPriceInteractorImpl Tests` {
             fun `with NETWORK_ERROR, should return NETWORK_ERROR`() {
                 // when
                 whenever(bitcoinPriceRepository.requestBitcoinMarketPrices(timePeriod))
-                    .thenReturn(Single.just(
-                        BitcoinPricesRequestResult(BitcoinPricesRequestResultCode.NETWORK_ERROR, null)))
+                    .thenReturn(
+                        Single.just(
+                            BitcoinPricesRequestResult(BitcoinPricesRequestResultCode.NETWORK_ERROR, null)
+                        )
+                    )
 
                 // action
                 bitcoinPriceInteractor.requestBitcoinMarketPrices(timePeriod)
@@ -130,8 +142,11 @@ class `BitcoinPriceInteractorImpl Tests` {
             fun `with OK, but data is null, should return GENERAL_ERROR`() {
                 // when
                 whenever(bitcoinPriceRepository.requestBitcoinMarketPrices(timePeriod))
-                    .thenReturn(Single.just(
-                        BitcoinPricesRequestResult(BitcoinPricesRequestResultCode.OK, null)))
+                    .thenReturn(
+                        Single.just(
+                            BitcoinPricesRequestResult(BitcoinPricesRequestResultCode.OK, null)
+                        )
+                    )
 
                 // action
                 bitcoinPriceInteractor.requestBitcoinMarketPrices(timePeriod)
@@ -157,8 +172,11 @@ class `BitcoinPriceInteractorImpl Tests` {
 
                 // when
                 whenever(bitcoinPriceRepository.requestBitcoinMarketPrices(timePeriod))
-                    .thenReturn(Single.just(
-                        BitcoinPricesRequestResult(BitcoinPricesRequestResultCode.OK, requestResultData)))
+                    .thenReturn(
+                        Single.just(
+                            BitcoinPricesRequestResult(BitcoinPricesRequestResultCode.OK, requestResultData)
+                        )
+                    )
 
             }
 
@@ -176,8 +194,10 @@ class `BitcoinPriceInteractorImpl Tests` {
             @AfterEach
             fun afterEachTest() {
                 // verify
-                verify(bitcoinPriceCacheRepository).putBitcoinMarketPrices(timePeriod,
-                    BitcoinPricesRequestResult(BitcoinPricesRequestResultCode.OK, requestResultData))
+                verify(bitcoinPriceCacheRepository).putBitcoinMarketPrices(
+                    timePeriod,
+                    BitcoinPricesRequestResult(BitcoinPricesRequestResultCode.OK, requestResultData)
+                )
             }
 
         }
@@ -197,13 +217,19 @@ class `BitcoinPriceInteractorImpl Tests` {
         fun beforeEachTest() {
             // when
             whenever(bitcoinPriceCacheRepository.findCachedBitcoinMarketPrices(any()))
-                .thenReturn(Single.just(
-                    Optional.of(BitcoinPricesRequestResult(BitcoinPricesRequestResultCode.OK, requestResultData))))
+                .thenReturn(
+                    Single.just(
+                        Optional.of(BitcoinPricesRequestResult(BitcoinPricesRequestResultCode.OK, requestResultData))
+                    )
+                )
             whenever(bitcoinPriceCacheRepository.putBitcoinMarketPrices(any(), any()))
                 .thenReturn(Completable.complete())
             whenever(bitcoinPriceRepository.requestBitcoinMarketPrices(timePeriod))
-                .thenReturn(Single.just(
-                    BitcoinPricesRequestResult(BitcoinPricesRequestResultCode.GENERAL_ERROR, null)))
+                .thenReturn(
+                    Single.just(
+                        BitcoinPricesRequestResult(BitcoinPricesRequestResultCode.GENERAL_ERROR, null)
+                    )
+                )
         }
 
         @Test
@@ -225,5 +251,4 @@ class `BitcoinPriceInteractorImpl Tests` {
 
     }
 
-
-    }
+}

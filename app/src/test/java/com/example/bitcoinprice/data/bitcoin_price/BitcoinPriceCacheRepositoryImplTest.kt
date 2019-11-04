@@ -42,9 +42,9 @@ class `BitcoinPriceCacheRepositoryImpl Test` {
         listOf(
             BitcoinPriceRequestDataPoint(point0Time, point0Price),
             BitcoinPriceRequestDataPoint(point1Time, point1Price)
-        ))
+        )
+    )
     private val requestResult = BitcoinPricesRequestResult(BitcoinPricesRequestResultCode.OK, requestResultData)
-
 
     @BeforeEach
     fun beforeEachTest() {
@@ -105,7 +105,6 @@ class `BitcoinPriceCacheRepositoryImpl Test` {
 
         // verify
         verify(lruCache).remove(timePeriod)
-
     }
 
 }

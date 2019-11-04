@@ -8,8 +8,8 @@ import javax.inject.Singleton
 
 @Singleton
 class SchedulersProviderImpl
-    @Inject
-    constructor() : SchedulersProvider {
+@Inject
+constructor() : SchedulersProvider {
 
     override fun main(): Scheduler {
         return AndroidSchedulers.mainThread()

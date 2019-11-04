@@ -20,13 +20,12 @@ import javax.inject.Inject
 
 @InjectViewState
 class BitcoinPriceGraphPresenter
-
-    @Inject
-    constructor(
-        private val bitcoinPriceInteractor: BitcoinPriceInteractor,
-        private val schedulersProvider: SchedulersProvider,
-        private var bitcoinPriceGraphScreenComponent: BitcoinPriceGraphScreenComponent? = getBitcoinPriceGraphScreenComponent()
-    ) : MvpPresenter<BitcoinPriceGraphView>() {
+@Inject
+constructor(
+    private val bitcoinPriceInteractor: BitcoinPriceInteractor,
+    private val schedulersProvider: SchedulersProvider,
+    private var bitcoinPriceGraphScreenComponent: BitcoinPriceGraphScreenComponent? = getBitcoinPriceGraphScreenComponent()
+) : MvpPresenter<BitcoinPriceGraphView>() {
 
     private var currentDisplayPeriod: DisplayPeriod = DisplayPeriod.DAY_3
 
@@ -54,12 +53,12 @@ class BitcoinPriceGraphPresenter
             .doOnSubscribe { log { i(TAG, "BitcoinPriceGraphPresenter.requestBitcoinPricesAndDisplay(): Subscribe. ") } }
             .doOnSuccess { log { i(TAG, "BitcoinPriceGraphPresenter.requestBitcoinPricesAndDisplay(): Success. Result: $it") } }
             .doOnError { log { w(TAG, "BitcoinPriceGraphPresenter.requestBitcoinPricesAndDisplay(): Error", it) } }
-            .flatMapCompletable { result -> processRequestBitcoinPricesResult(result)  }
+            .flatMapCompletable { result -> processRequestBitcoinPricesResult(result) }
             .doOnSubscribe { showLoadingProgress(true) }
             .doFinally { showLoadingProgress(false) }
             .subscribeOn(schedulersProvider.io())
             .doOnDispose { requestPricesDisposable = null }
-            .subscribe( { }, { } )
+            .subscribe({ }, { })
     }
 
     fun retry() {
@@ -67,15 +66,15 @@ class BitcoinPriceGraphPresenter
     }
 
     private fun processRequestBitcoinPricesResult(result: BitcoinPricesResult): Completable {
-        return  when (result.resultCode) {
-                BitcoinPricesResultCode.OK -> processSuccessResult(result)
-                BitcoinPricesResultCode.NETWORK_ERROR ->
-                    Completable.fromCallable { viewState.showNetworkError(true) }
-                        .subscribeOn(schedulersProvider.main())
-                BitcoinPricesResultCode.GENERAL_ERROR ->
-                    Completable.fromCallable { viewState.showGeneraError(true) }
-                        .subscribeOn(schedulersProvider.main())
-            }
+        return when (result.resultCode) {
+            BitcoinPricesResultCode.OK -> processSuccessResult(result)
+            BitcoinPricesResultCode.NETWORK_ERROR ->
+                Completable.fromCallable { viewState.showNetworkError(true) }
+                    .subscribeOn(schedulersProvider.main())
+            BitcoinPricesResultCode.GENERAL_ERROR ->
+                Completable.fromCallable { viewState.showGeneraError(true) }
+                    .subscribeOn(schedulersProvider.main())
+        }
 
     }
 
@@ -86,14 +85,14 @@ class BitcoinPriceGraphPresenter
 
     private fun hideAllErrors(): Completable {
         return Completable.fromCallable {
-                viewState.showGeneraError(false)
-                viewState.showNetworkError(false)
-            }
+            viewState.showGeneraError(false)
+            viewState.showNetworkError(false)
+        }
             .subscribeOn(schedulersProvider.main())
     }
 
     private fun showLoadingProgress(show: Boolean) {
-        runOnMainThread { viewState.showLoadingProgress(show)  }
+        runOnMainThread { viewState.showLoadingProgress(show) }
     }
 
     private fun processBitcoinPrices(bitcoinPricePoints: List<BitcoinPriceDataPoint>): Completable {
@@ -143,13 +142,13 @@ class BitcoinPriceGraphPresenter
             .subscribe()
     }
 
-    data class InfoData (
+    private data class InfoData(
         val maxPrice: Double?,
         val minPrice: Double?,
         val averagePrice: Double?
     )
 
-    companion object {
+    private companion object {
         private const val TAG = "BitcoinPriceGraphPr"
 
         private fun getBitcoinPriceGraphScreenComponent(): BitcoinPriceGraphScreenComponent {

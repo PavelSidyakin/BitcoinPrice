@@ -13,7 +13,7 @@ abstract class AppModule {
 
     @Singleton
     @Binds
-    abstract fun provideSchedulersProvider(schedulersProvider: SchedulersProviderImpl) : SchedulersProvider
+    abstract fun provideSchedulersProvider(schedulersProvider: SchedulersProviderImpl): SchedulersProvider
 
     @Singleton
     @Binds

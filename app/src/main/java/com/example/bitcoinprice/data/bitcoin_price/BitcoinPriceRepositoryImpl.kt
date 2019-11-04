@@ -19,36 +19,32 @@ import io.reactivex.Single
 import javax.inject.Inject
 
 class BitcoinPriceRepositoryImpl
-    @Inject
-    constructor(private val blockChainDataProvider: BlockChainDataProvider)
-    : BitcoinPriceRepository {
+@Inject
+constructor(private val blockChainDataProvider: BlockChainDataProvider) : BitcoinPriceRepository {
 
 
     override fun requestBitcoinMarketPrices(periodBeforeToday: TimePeriod): Single<BitcoinPricesRequestResult> {
         return blockChainDataProvider.requestBitcoinMarketPrices(convertTimePeriod2Time(periodBeforeToday))
-            .map { convertBlockChainRequestMarketPricesResult2BitcoinPricesRequestResult(it) }
+            .map { convertBlockChainResult2BitcoinResult(it) }
             .doOnSubscribe { log { i(TAG, "BitcoinPriceRepositoryImpl.requestBitcoinMarketPrices(): Subscribe. periodBeforeTodayDays = [${periodBeforeToday}]") } }
             .doOnSuccess { log { i(TAG, "BitcoinPriceRepositoryImpl.requestBitcoinMarketPrices(): Success. Result: $it") } }
             .doOnError { log { w(TAG, "BitcoinPriceRepositoryImpl.requestBitcoinMarketPrices(): Error", it) } }
-            .onErrorResumeNext { processError(it) }
+            .onErrorResumeNext { Single.just(processError(it)) }
     }
 
-    private fun processError(throwable: Throwable): Single<BitcoinPricesRequestResult> {
-        return if (throwable is BlockChainDataError) {
-            when(throwable.code) {
-                BlockChainDataError.Code.NETWORK_ERROR -> Single.just(
-                    BitcoinPricesRequestResult(BitcoinPricesRequestResultCode.NETWORK_ERROR, null))
-                else -> Single.just(
-                    BitcoinPricesRequestResult(BitcoinPricesRequestResultCode.GENERAL_ERROR, null))
-            }
-        } else {
-            Single.just(
-                BitcoinPricesRequestResult(BitcoinPricesRequestResultCode.GENERAL_ERROR, null))
+    private fun processError(throwable: Throwable): BitcoinPricesRequestResult {
+        if (throwable !is BlockChainDataError) {
+            return BitcoinPricesRequestResult(BitcoinPricesRequestResultCode.GENERAL_ERROR, null)
+        }
+
+        return when (throwable.code) {
+            BlockChainDataError.Code.NETWORK_ERROR -> BitcoinPricesRequestResult(BitcoinPricesRequestResultCode.NETWORK_ERROR, null)
+            else -> BitcoinPricesRequestResult(BitcoinPricesRequestResultCode.GENERAL_ERROR, null)
         }
     }
 
     private fun convertTimePeriod2Time(timePeriod: TimePeriod): Time {
-        return when(timePeriod.timePeriodUnit) {
+        return when (timePeriod.timePeriodUnit) {
             TimePeriodUnit.DAY -> Time(timePeriod.count, TimeUnit.DAY)
             TimePeriodUnit.MONTH -> Time(timePeriod.count * 4, TimeUnit.WEEK)
             TimePeriodUnit.YEAR -> Time(timePeriod.count, TimeUnit.YEAR)
@@ -56,12 +52,9 @@ class BitcoinPriceRepositoryImpl
         }
     }
 
-    private fun convertBlockChainRequestMarketPricesResult2BitcoinPricesRequestResult(
-        blockChainResult: Result
-    ): BitcoinPricesRequestResult {
-
+    private fun convertBlockChainResult2BitcoinResult(blockChainResult: Result): BitcoinPricesRequestResult {
         return BitcoinPricesRequestResult(
-            convertStatus2BitcoinPricesRequestResultCode(blockChainResult.status),
+            convertStatus2ResultCode(blockChainResult.status),
             BitcoinPricesRequestResultData(
                 blockChainResult.values?.map { convertDataPoint2BitcoinPriceDataPoint(it) })
         )
@@ -74,14 +67,14 @@ class BitcoinPriceRepositoryImpl
         )
     }
 
-    private fun convertStatus2BitcoinPricesRequestResultCode(status: Status): BitcoinPricesRequestResultCode {
-        return when(status) {
+    private fun convertStatus2ResultCode(status: Status): BitcoinPricesRequestResultCode {
+        return when (status) {
             Status.ok -> BitcoinPricesRequestResultCode.OK
             else -> BitcoinPricesRequestResultCode.GENERAL_ERROR
         }
     }
 
-    companion object {
+    private companion object {
         private const val TAG = "BitcoinPriceRepository"
     }
 
