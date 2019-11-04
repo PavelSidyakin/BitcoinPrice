@@ -37,7 +37,6 @@ class BitcoinPriceGraphPresenter
     init {
         bitcoinPriceGraphScreenComponent = TheApplication.getAppComponent()
             .getBitcoinPriceScreenComponent()
-        bitcoinPriceGraphScreenComponent?.inject(this)
 
     }
 
