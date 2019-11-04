@@ -48,7 +48,7 @@ class `BitcoinPriceGraphPresenter Tests` {
             BitcoinPriceDataPoint(pointsTime[0], pointsPrice[0]),
             BitcoinPriceDataPoint(pointsTime[1], pointsPrice[1])
         ))
-    val expectedListOfEntries = listOf(
+    private val expectedListOfEntries = listOf(
         Entry(pointsTime[0].toFloat(), pointsPrice[0].toFloat(), BitcoinPriceDataPoint(pointsTime[0], pointsPrice[0])),
         Entry(pointsTime[1].toFloat(), pointsPrice[1].toFloat(), BitcoinPriceDataPoint(pointsTime[1], pointsPrice[1]))
     )

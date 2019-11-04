@@ -3,7 +3,6 @@ package com.example.bitcoinprice.presentation.bitcoin_price.view
 import com.arellomobile.mvp.MvpView
 import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy
 import com.arellomobile.mvp.viewstate.strategy.AddToEndStrategy
-import com.arellomobile.mvp.viewstate.strategy.OneExecutionStateStrategy
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType
 import com.example.bitcoinprice.presentation.bitcoin_price.model.DisplayPeriod
 import com.github.mikephil.charting.data.Entry

@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="color_primary">#008577</color>
-    <color name="color_primary_dark">#00574B</color>
-    <color name="color_accent">#D81B60</color>
 
     <color name="color_material_purple_500">#9C27B0</color>
-    <color name="color_material_purple_300">#BA68C8</color>
-    <color name="color_material_red_500">#F44336</color>
     <color name="color_material_purple_a100">#EA80FC</color>
     <color name="color_material_orange_a100">#FFD180</color>
 

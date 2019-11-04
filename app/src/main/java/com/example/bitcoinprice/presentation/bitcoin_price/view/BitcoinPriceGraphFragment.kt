@@ -218,7 +218,7 @@ class BitcoinPriceGraphFragment: MvpAppCompatFragment(), BitcoinPriceGraphView {
 
     }
 
-    inner class XAxisValueFormatter() : ValueFormatter() {
+    inner class XAxisValueFormatter : ValueFormatter() {
         override fun getAxisLabel(value: Float, axis: AxisBase?): String {
             return formatTimestamp(value.toLong())
         }

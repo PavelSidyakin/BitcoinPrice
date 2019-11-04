@@ -4,8 +4,7 @@
     xmlns:tool="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_margin="4dp"
-    >
+    android:layout_margin="4dp">
 
     <TextView
         android:id="@+id/text_view_date_marker_bitcoin_graph"
@@ -13,14 +12,14 @@
         android:layout_height="wrap_content"
         android:paddingStart="4dp"
         android:paddingEnd="4dp"
-        android:textStyle="bold"
         android:textAlignment="textStart"
         android:textColor="?attr/color_bitcoin_graph_marker_date"
         android:textSize="10sp"
-
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        tool:ignore="SmallSp"
         tool:text="23.09.2019" />
 
     <TextView
@@ -31,12 +30,13 @@
         android:paddingEnd="4dp"
         android:textAlignment="textStart"
         android:textColor="?color_bitcoin_graph_marker_price"
-        android:textStyle="bold"
         android:textSize="10sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/text_view_date_marker_bitcoin_graph"
+        tool:ignore="SmallSp"
         tool:text="234.88" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

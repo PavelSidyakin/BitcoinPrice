@@ -68,7 +68,6 @@ class BitcoinPriceInteractorImpl
             BitcoinPricesRequestResultCode.OK -> BitcoinPricesResultCode.OK
             BitcoinPricesRequestResultCode.NETWORK_ERROR -> BitcoinPricesResultCode.NETWORK_ERROR
             BitcoinPricesRequestResultCode.GENERAL_ERROR -> BitcoinPricesResultCode.GENERAL_ERROR
-            else -> BitcoinPricesResultCode.GENERAL_ERROR
         }
 
     }

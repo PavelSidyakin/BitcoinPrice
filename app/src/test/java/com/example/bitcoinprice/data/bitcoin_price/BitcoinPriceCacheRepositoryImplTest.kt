@@ -10,7 +10,6 @@ import com.example.bitcoinprice.model.domain.TimePeriodUnit
 import com.example.bitcoinprice.utils.TimeProvider
 import com.example.bitcoinprice.utils.logs.LogWrapper
 import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import org.junit.jupiter.api.BeforeEach
