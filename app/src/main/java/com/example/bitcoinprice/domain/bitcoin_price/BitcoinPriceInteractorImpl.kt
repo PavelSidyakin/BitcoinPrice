@@ -46,8 +46,12 @@ class BitcoinPriceInteractorImpl
         return bitcoinPriceRepository.requestBitcoinMarketPrices(periodBeforeToday)
             .flatMap { result ->
                 if (result.resultCode == BitcoinPricesRequestResultCode.OK) {
-                    bitcoinPriceCacheRepository.putBitcoinMarketPrices(periodBeforeToday, result)
-                        .toSingleDefault(result)
+                    if (result.data != null) {
+                        bitcoinPriceCacheRepository.putBitcoinMarketPrices(periodBeforeToday, result)
+                            .toSingleDefault(result)
+                    } else {
+                        Single.just(BitcoinPricesRequestResult(BitcoinPricesRequestResultCode.GENERAL_ERROR, null))
+                    }
                 } else {
                     Single.just(result)
                 }
