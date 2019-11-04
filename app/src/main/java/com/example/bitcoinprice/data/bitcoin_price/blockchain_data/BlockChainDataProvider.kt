@@ -6,6 +6,18 @@ import io.reactivex.Single
 
 interface BlockChainDataProvider {
 
-    fun requestBitcoinMarketPrices(timeSpan: Time, rollingAverage: Time? = null): Single<Result>
+    /**
+     * Requests bitcoin marker prices.
+     *
+     * @param timePeriod Requested period.
+     * @param rollingAverage Rolling average period. If null no rolling average is applied.
+     *
+     * @return Single with request result.
+     *
+     * Subscribe: io
+     * Error: [BlockChainDataError]
+     *
+     */
+    fun requestBitcoinMarketPrices(timePeriod: Time, rollingAverage: Time? = null): Single<Result>
 
 }

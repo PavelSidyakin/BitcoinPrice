@@ -35,8 +35,6 @@ class `BitcoinPriceInteractorImpl Tests` {
     @Mock
     private lateinit var bitcoinPriceRepository: BitcoinPriceRepository
 
-    private val schedulersProvider = SchedulersProviderStub()
-
     private lateinit var bitcoinPriceInteractor: BitcoinPriceInteractorImpl
 
     // Sample test data
@@ -52,6 +50,7 @@ class `BitcoinPriceInteractorImpl Tests` {
         listOf(BitcoinPriceRequestDataPoint(point0Time, point0Price),
             BitcoinPriceRequestDataPoint(point1Time, point1Price)
         ))
+
     private val resultData = BitcoinPricesResultData(
         listOf(BitcoinPriceDataPoint(point0Time, point0Price),
             BitcoinPriceDataPoint(point1Time, point1Price)
@@ -59,13 +58,13 @@ class `BitcoinPriceInteractorImpl Tests` {
 
     @BeforeEach
     fun beforeEachTest() {
-        LogWrapper.enableLogging(false)
+        LogWrapper.enabled = false
 
         MockitoAnnotations.initMocks(this)
 
         bitcoinPriceInteractor = BitcoinPriceInteractorImpl(bitcoinPriceCacheRepository,
             bitcoinPriceRepository,
-            schedulersProvider)
+            SchedulersProviderStub())
 
     }
 

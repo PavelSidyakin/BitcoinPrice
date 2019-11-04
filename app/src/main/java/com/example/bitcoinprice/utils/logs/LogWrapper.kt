@@ -5,10 +5,6 @@ import android.util.Log
 object LogWrapper {
     var enabled = true
 
-    fun enableLogging(enable: Boolean) {
-        enabled = enable
-    }
-
     fun v(tag: String, message: String) {
         if (enabled) Log.v(tag, message)
     }

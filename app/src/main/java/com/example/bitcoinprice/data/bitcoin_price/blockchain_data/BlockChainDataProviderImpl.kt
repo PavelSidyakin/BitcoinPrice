@@ -24,11 +24,11 @@ class BlockChainDataProviderImpl
     private val retrofit: Retrofit by lazy { createRetrofit() }
 
 
-    override fun requestBitcoinMarketPrices(timeSpan: Time, rollingAverage: Time?): Single<Result> {
+    override fun requestBitcoinMarketPrices(timePeriod: Time, rollingAverage: Time?): Single<Result> {
         return Single.fromCallable { createRequestMarketPricesService() }
-            .flatMap { service -> service.requestMarketPrices(timeSpan.asString(), rollingAverage?.asString()) }
+            .flatMap { service -> service.requestMarketPrices(timePeriod.asString(), rollingAverage?.asString()) }
             .onErrorResumeNext { throwable -> handleError(throwable) }
-            .doOnSubscribe { log { i(TAG, "BlockChainDataProviderImpl.requestBitcoinMarketPrices(): Subscribe. timeSpan = [${timeSpan}], rollingAverage = [${rollingAverage}]") } }
+            .doOnSubscribe { log { i(TAG, "BlockChainDataProviderImpl.requestBitcoinMarketPrices(): Subscribe. timePeriod = [${timePeriod}], rollingAverage = [${rollingAverage}]") } }
             .doOnSuccess { log { i(TAG, "BlockChainDataProviderImpl.requestBitcoinMarketPrices(): Success. Result: $it") } }
             .doOnError { log { w(TAG, "BlockChainDataProviderImpl.requestBitcoinMarketPrices(): Error", it) } }
             .subscribeOn(schedulersProvider.io())

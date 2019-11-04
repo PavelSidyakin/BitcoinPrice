@@ -24,21 +24,13 @@ class BitcoinPriceGraphPresenter
     @Inject
     constructor(
         private val bitcoinPriceInteractor: BitcoinPriceInteractor,
-        private val schedulersProvider: SchedulersProvider
-
+        private val schedulersProvider: SchedulersProvider,
+        private var bitcoinPriceGraphScreenComponent: BitcoinPriceGraphScreenComponent? = getBitcoinPriceGraphScreenComponent()
     ) : MvpPresenter<BitcoinPriceGraphView>() {
-
-    private var bitcoinPriceGraphScreenComponent: BitcoinPriceGraphScreenComponent? = null
 
     private var currentDisplayPeriod: DisplayPeriod = DisplayPeriod.DAY_3
 
     private var requestPricesDisposable: Disposable? = null
-
-    init {
-        bitcoinPriceGraphScreenComponent = TheApplication.getAppComponent()
-            .getBitcoinPriceScreenComponent()
-
-    }
 
     override fun onFirstViewAttach() {
         DisplayPeriod.values().forEach { viewState.addDisplayPeriod(it) }
@@ -57,13 +49,13 @@ class BitcoinPriceGraphPresenter
 
     private fun requestBitcoinPricesAndDisplay() {
 
-        requestPricesDisposable = bitcoinPriceInteractor.requestBitcoinMarketPrices(currentDisplayPeriod.timePeriod)
+        requestPricesDisposable = hideAllErrors()
+            .andThen(Single.defer { bitcoinPriceInteractor.requestBitcoinMarketPrices(currentDisplayPeriod.timePeriod) })
             .doOnSubscribe { log { i(TAG, "BitcoinPriceGraphPresenter.requestBitcoinPricesAndDisplay(): Subscribe. ") } }
             .doOnSuccess { log { i(TAG, "BitcoinPriceGraphPresenter.requestBitcoinPricesAndDisplay(): Success. Result: $it") } }
             .doOnError { log { w(TAG, "BitcoinPriceGraphPresenter.requestBitcoinPricesAndDisplay(): Error", it) } }
             .flatMapCompletable { result -> processRequestBitcoinPricesResult(result)  }
             .doOnSubscribe { showLoadingProgress(true) }
-            .doOnSubscribe { hideAllErrors() }
             .doFinally { showLoadingProgress(false) }
             .subscribeOn(schedulersProvider.io())
             .doOnDispose { requestPricesDisposable = null }
@@ -159,5 +151,11 @@ class BitcoinPriceGraphPresenter
 
     companion object {
         private const val TAG = "BitcoinPriceGraphPr"
+
+        private fun getBitcoinPriceGraphScreenComponent(): BitcoinPriceGraphScreenComponent {
+            return TheApplication.getAppComponent()
+                .getBitcoinPriceScreenComponent()
+        }
+
     }
 }

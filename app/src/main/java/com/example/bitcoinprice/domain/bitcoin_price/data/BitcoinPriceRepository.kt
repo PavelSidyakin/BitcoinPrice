@@ -6,6 +6,17 @@ import io.reactivex.Single
 
 interface BitcoinPriceRepository {
 
+    /**
+     * Requests bitcoin marker prices.
+     *
+     * @param periodBeforeToday Requested period.
+     *
+     * @return Single with request result.
+     *
+     * Subscribe: io
+     * Error: no
+     *
+     */
     fun requestBitcoinMarketPrices(periodBeforeToday: TimePeriod): Single<BitcoinPricesRequestResult>
 
 }
