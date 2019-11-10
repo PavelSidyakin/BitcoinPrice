@@ -39,10 +39,12 @@ constructor(
     fun onDisplayPeriodSelected(displayPeriod: DisplayPeriod) {
         log { i(TAG, "BitcoinPriceGraphPresenter.onDisplayPeriodSelected(). displayPeriod = [${displayPeriod}]") }
 
-        if (requestPricesDisposable?.isDisposed != false) {
-            currentDisplayPeriod = displayPeriod
-            requestBitcoinPricesAndDisplay()
+        if (requestPricesDisposable?.isDisposed == false) {
+            requestPricesDisposable?.dispose()
         }
+
+        currentDisplayPeriod = displayPeriod
+        requestBitcoinPricesAndDisplay()
         viewState.selectDisplayPeriod(currentDisplayPeriod)
     }
 
@@ -132,6 +134,7 @@ constructor(
 
         if (requestPricesDisposable?.isDisposed == false) {
             requestPricesDisposable?.dispose()
+            requestPricesDisposable = null
         }
         //bitcoinPriceGraphScreenComponent = null
     }
