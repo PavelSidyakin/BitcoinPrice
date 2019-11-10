@@ -20,4 +20,11 @@ class MainActivity : AppCompatActivity() {
         fragmentTransaction.commit()
     }
 
+    override fun onDestroy() {
+        // TODO: remove it.
+        // Just for testing presenter lifecycle
+        finish();
+        super.onDestroy()
+    }
+
 }

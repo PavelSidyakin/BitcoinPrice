@@ -7,9 +7,6 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.arellomobile.mvp.MvpAppCompatFragment
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.example.bitcoinprice.R
 import com.example.bitcoinprice.TheApplication
 import com.example.bitcoinprice.model.domain.bitcoin_price.BitcoinPriceDataPoint
@@ -38,6 +35,9 @@ import kotlinx.android.synthetic.main.layout_bitcoin_price_graph_info.text_view_
 import kotlinx.android.synthetic.main.layout_bitcoin_price_graph_info.text_view_info_min_price
 import kotlinx.android.synthetic.main.layout_bitcoin_price_graph_marker.view.text_view_date_marker_bitcoin_graph
 import kotlinx.android.synthetic.main.layout_bitcoin_price_graph_marker.view.text_view_price_marker_bitcoin_graph
+import moxy.MvpAppCompatFragment
+import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
 import java.math.RoundingMode
 import java.text.DateFormat
 import java.util.Date

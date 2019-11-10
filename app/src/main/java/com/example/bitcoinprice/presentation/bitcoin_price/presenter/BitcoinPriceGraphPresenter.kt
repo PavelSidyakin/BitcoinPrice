@@ -1,7 +1,5 @@
 package com.example.bitcoinprice.presentation.bitcoin_price.presenter
 
-import com.arellomobile.mvp.InjectViewState
-import com.arellomobile.mvp.MvpPresenter
 import com.example.bitcoinprice.TheApplication
 import com.example.bitcoinprice.di.screen.BitcoinPriceGraphScreenComponent
 import com.example.bitcoinprice.domain.bitcoin_price.BitcoinPriceInteractor
@@ -16,6 +14,8 @@ import com.github.mikephil.charting.data.Entry
 import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.disposables.Disposable
+import moxy.InjectViewState
+import moxy.MvpPresenter
 import javax.inject.Inject
 
 @InjectViewState
@@ -23,8 +23,8 @@ class BitcoinPriceGraphPresenter
 @Inject
 constructor(
     private val bitcoinPriceInteractor: BitcoinPriceInteractor,
-    private val schedulersProvider: SchedulersProvider,
-    private var bitcoinPriceGraphScreenComponent: BitcoinPriceGraphScreenComponent? = getBitcoinPriceGraphScreenComponent()
+    private val schedulersProvider: SchedulersProvider//,
+    //private var bitcoinPriceGraphScreenComponent: BitcoinPriceGraphScreenComponent? = getBitcoinPriceGraphScreenComponent()
 ) : MvpPresenter<BitcoinPriceGraphView>() {
 
     private var currentDisplayPeriod: DisplayPeriod = DisplayPeriod.DAY_3
@@ -133,7 +133,7 @@ constructor(
         if (requestPricesDisposable?.isDisposed == false) {
             requestPricesDisposable?.dispose()
         }
-        bitcoinPriceGraphScreenComponent = null
+        //bitcoinPriceGraphScreenComponent = null
     }
 
     private fun runOnMainThread(block: () -> Unit) {
